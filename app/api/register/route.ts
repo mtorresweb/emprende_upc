@@ -7,6 +7,9 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 export const revalidate = 0;
+export const fetchCache = "force-no-store";
+export const dynamicParams = true;
+export const preferredRegion = "auto";
 
 const registerSchema = z.object({
   name: z.string().min(2).max(100),
