@@ -65,7 +65,7 @@ export function SiteHeader() {
                   aria-label="Menú de usuario"
                 >
                   <Avatar>
-                    <AvatarImage alt="Avatar" src={session.user.avatarKey || undefined} />
+                    <AvatarImage alt="Avatar" src={(session.user as any).avatarKey || undefined} />
                     <AvatarFallback>
                       {session.user.name?.[0] || session.user.email?.[0] || "U"}
                     </AvatarFallback>

@@ -83,7 +83,7 @@ async function createVenture(userId: string, formData: FormData) {
 
   if (files.length > 0) {
     if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      return { error: "Falta BLOB_READ_WRITE_TOKEN" };
+      redirect("/panel?error=Falta%20BLOB_READ_WRITE_TOKEN");
     }
     try {
       for (const file of files) {

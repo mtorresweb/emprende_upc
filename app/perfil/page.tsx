@@ -54,7 +54,7 @@ async function saveProfile(userId: string, formData: FormData) {
   });
 
   if (!parsed.success) {
-    return { error: "Revisa los datos ingresados." };
+    redirect("/perfil?error=Revisa%20los%20datos%20ingresados.");
   }
 
   const interests = parsed.data.interests
@@ -75,10 +75,14 @@ async function saveProfile(userId: string, formData: FormData) {
   } else if (file && file.size > 0) {
     const MAX_SIZE = 2 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      return { error: "La imagen supera los 2MB." };
+      redirect("/perfil?error=La%20imagen%20supera%20los%202MB.");
     }
     if (!file.type.startsWith("image/")) {
-      return { error: "Solo se permiten imágenes." };
+      redirect("/perfil?error=Solo%20se%20permiten%20im%C3%A1genes.");
+    }
+
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      redirect("/perfil?error=Falta%20BLOB_READ_WRITE_TOKEN");
     }
 
     const ext = file.name.split(".").pop() || "png";
@@ -123,7 +127,7 @@ async function saveProfile(userId: string, formData: FormData) {
 export default async function PerfilPage({
   searchParams,
 }: {
-  searchParams?: { updated?: string };
+  searchParams?: { updated?: string; error?: string };
 }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
