@@ -10,7 +10,8 @@ export async function middleware(req: NextRequest) {
 
   if (!isProtected) return NextResponse.next();
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET });
+  const secret = process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || "devsecret";
+  const token = await getToken({ req, secret });
 
   if (!token) {
     const loginUrl = new URL("/login", req.url);
