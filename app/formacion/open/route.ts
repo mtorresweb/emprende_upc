@@ -1,10 +1,9 @@
-import fs from "fs/promises";
-import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isValidTrainingPath } from "@/lib/training";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -13,16 +12,6 @@ export const revalidate = 0;
 function sanitizeResource(resource: string) {
   const clean = resource.replace(/^\/+/, "");
   return clean;
-}
-
-async function fileExists(relativePath: string) {
-  const fullPath = path.join(process.cwd(), "public", relativePath);
-  try {
-    await fs.access(fullPath);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 export async function GET(req: NextRequest) {
@@ -38,8 +27,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Recurso inválido" }, { status: 400 });
   }
 
-  const exists = await fileExists(sanitized);
-  if (!exists) {
+  if (!isValidTrainingPath(sanitized)) {
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
   }
 
