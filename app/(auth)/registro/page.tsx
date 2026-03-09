@@ -4,7 +4,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -23,11 +23,30 @@ const PROGRAM_OPTIONS = [
   "tecnologia agropecuaria",
 ] as const;
 
+const EMAIL_DOMAIN = "unicesar.edu.co";
+
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Ingresa tu nombre" }),
-  email: z.string().email({ message: "Correo inválido" }),
-  password: z.string().min(8, { message: "Mínimo 8 caracteres" }),
-  documentNumber: z.string().min(6, { message: "Ingresa tu número de documento" }).max(30),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email({ message: "Correo inválido" })
+    .refine((value) => value.endsWith(`@${EMAIL_DOMAIN}`), {
+      message: `El correo debe ser @${EMAIL_DOMAIN}`,
+    }),
+  password: z
+    .string()
+    .min(8, { message: "Mínimo 8 caracteres" })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/, {
+      message: "Incluye mayúscula, minúscula y número",
+    }),
+  documentNumber: z
+    .string()
+    .trim()
+    .regex(/^\d+$/, { message: "El documento solo debe tener números" })
+    .min(6, { message: "Ingresa tu número de documento" })
+    .max(30),
   program: z.enum(PROGRAM_OPTIONS, { message: "Selecciona tu programa" }),
 });
 
@@ -38,6 +57,7 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<RegisterForm>({ resolver: zodResolver(registerSchema) });
 
@@ -117,19 +137,24 @@ export default function RegisterPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="program">Programa académico</Label>
-              <Select onValueChange={(v) => { void (register("program").onChange as any)({ target: { value: v } }); }}>
-                <SelectTrigger id="program" className="h-11">
-                  <SelectValue placeholder="Selecciona tu programa" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PROGRAM_OPTIONS.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option.charAt(0).toUpperCase() + option.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <input type="hidden" {...register("program")} />
+              <Controller
+                name="program"
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger id="program" className="h-11">
+                      <SelectValue placeholder="Selecciona tu programa" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROGRAM_OPTIONS.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option.charAt(0).toUpperCase() + option.slice(1)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.program && (
                 <p className="text-sm text-destructive">{errors.program.message}</p>
               )}

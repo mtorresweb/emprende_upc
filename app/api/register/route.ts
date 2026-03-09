@@ -21,11 +21,31 @@ const PROGRAM_OPTIONS = [
   "tecnologia agropecuaria",
 ] as const;
 
+const EMAIL_DOMAIN = "unicesar.edu.co";
+
 const registerSchema = z.object({
   name: z.string().min(2).max(100),
-  email: z.string().email(),
-  password: z.string().min(8).max(128),
-  documentNumber: z.string().min(6).max(30),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email()
+    .refine((value) => value.endsWith(`@${EMAIL_DOMAIN}`), {
+      message: `El correo debe ser @${EMAIL_DOMAIN}`,
+    }),
+  password: z
+    .string()
+    .min(8)
+    .max(128)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/, {
+      message: "Incluye mayúscula, minúscula y número",
+    }),
+  documentNumber: z
+    .string()
+    .trim()
+    .regex(/^\d+$/, { message: "El documento solo debe tener números" })
+    .min(6)
+    .max(30),
   program: z.enum(PROGRAM_OPTIONS),
 });
 
@@ -35,10 +55,10 @@ export async function POST(req: Request) {
     const parsed = registerSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: "Datos inválidos", issues: parsed.error.flatten().fieldErrors },
-        { status: 400 }
-      );
+      const fieldErrors = parsed.error.flatten().fieldErrors;
+      const emailError = fieldErrors.email?.[0];
+      const message = emailError ?? "Datos inválidos";
+      return NextResponse.json({ error: message, issues: fieldErrors }, { status: 400 });
     }
 
     const { name, email, password, documentNumber, program } = parsed.data;
