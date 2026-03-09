@@ -6,16 +6,29 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const PROGRAM_OPTIONS = [
+  "contaduria publica",
+  "economia",
+  "administracion de empresas",
+  "ingenieria agroindustrial",
+  "ingenieria ambiental y sanitaria",
+  "ingenieria de sistemas",
+  "tecnologia agropecuaria",
+] as const;
+
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Ingresa tu nombre" }),
   email: z.string().email({ message: "Correo inválido" }),
   password: z.string().min(8, { message: "Mínimo 8 caracteres" }),
+  documentNumber: z.string().min(6, { message: "Ingresa tu número de documento" }).max(30),
+  program: z.enum(PROGRAM_OPTIONS, { message: "Selecciona tu programa" }),
 });
 
 type RegisterForm = z.infer<typeof registerSchema>;
@@ -89,6 +102,36 @@ export default function RegisterPage() {
               />
               {errors.password && (
                 <p className="text-sm text-destructive">{errors.password.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="documentNumber">Número de documento</Label>
+              <Input
+                id="documentNumber"
+                autoComplete="off"
+                {...register("documentNumber")}
+              />
+              {errors.documentNumber && (
+                <p className="text-sm text-destructive">{errors.documentNumber.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="program">Programa académico</Label>
+              <Select onValueChange={(v) => { void (register("program").onChange as any)({ target: { value: v } }); }}>
+                <SelectTrigger id="program" className="h-11">
+                  <SelectValue placeholder="Selecciona tu programa" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PROGRAM_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <input type="hidden" {...register("program")} />
+              {errors.program && (
+                <p className="text-sm text-destructive">{errors.program.message}</p>
               )}
             </div>
             {serverError && <p className="text-sm text-destructive">{serverError}</p>}

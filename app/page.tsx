@@ -10,6 +10,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { prisma } from "@/lib/prisma";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +50,7 @@ const training = [
 const stats = [
   { label: "Emprendimientos en piloto", value: "12" },
   { label: "Horas de formación", value: "24+" },
-  { label: "Mentores invitados", value: "8" },
+  { label: "Módulos disponibles", value: "4" },
 ];
 
 const steps = [
@@ -69,30 +71,51 @@ const steps = [
   },
 ];
 
-const ventures = [
-  {
-    title: "BioPack",
-    stage: "MVP",
-    summary: "Packaging compostable para e-commerce locales.",
-    tags: ["Sostenible", "D2C"],
-  },
-  {
-    title: "TutorAI",
-    stage: "PROTOTYPE",
-    summary: "Asistente de estudio para cursos intro de ingeniería.",
-    tags: ["EdTech", "IA"],
-  },
-  {
-    title: "Mercadito UPC",
-    stage: "IDEA",
-    summary: "Marketplace de productos hechos por estudiantes.",
-    tags: ["Marketplace", "Local"],
-  },
-];
+const stageLabel: Record<string, string> = {
+  IDEA: "Idea",
+  PROTOTYPE: "Prototipo",
+  MVP: "MVP",
+  GROWTH: "Crecimiento",
+};
 
-export default function Home() {
+export default async function Home() {
+  const featured = await prisma.venture.findMany({
+    where: { published: true },
+    orderBy: { createdAt: "desc" },
+    take: 6,
+    select: { id: true, title: true, summary: true, stage: true, tags: true },
+  });
+
+  const hasFeatured = featured.length > 0;
+
+  const ventures = hasFeatured
+    ? featured
+    : [
+        {
+          id: "#biopack",
+          title: "BioPack",
+          stage: "MVP",
+          summary: "Packaging compostable para e-commerce locales.",
+          tags: ["Sostenible", "D2C"],
+        },
+        {
+          id: "#tutorai",
+          title: "TutorAI",
+          stage: "PROTOTYPE",
+          summary: "Asistente de estudio para cursos intro de ingeniería.",
+          tags: ["EdTech", "IA"],
+        },
+        {
+          id: "#mercadito",
+          title: "Mercadito UPC",
+          stage: "IDEA",
+          summary: "Marketplace de productos hechos por estudiantes.",
+          tags: ["Marketplace", "Local"],
+        },
+      ];
+
   return (
-    <div className="bg-gradient-to-b from-background via-background/80 to-secondary/20">
+    <div className="bg-linear-to-b from-background via-background/80 to-secondary/20">
       <main className="mx-auto flex max-w-6xl flex-col gap-16 px-6 py-16 md:gap-20 md:px-10 lg:px-16">
         <section className="grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
@@ -110,10 +133,13 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button asChild>
-                <Link href="/registro">Registrarme</Link>
+                <Link href="/registro" className="text-amber-50">Registrarme</Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href="#caracteristicas">Ver características</Link>
+              </Button>
+              <Button variant="secondary" asChild>
+                <Link href="/emprendimientos">Ver emprendimientos</Link>
               </Button>
             </div>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -129,37 +155,39 @@ export default function Home() {
           </div>
           <Card className="border-border/80 bg-card/80 backdrop-blur">
             <CardHeader className="space-y-2">
-              <CardTitle className="flex items-center gap-2 text-xl">
+                <CardTitle className="flex items-center gap-2 text-xl">
                 <Sparkles className="h-5 w-5 text-primary" />
                 Vista previa del panel
               </CardTitle>
               <CardDescription>
-                Todo en un tablero: publicaciones, formación y asistencia en un solo lugar.
+                Así se verá cuando te registres: prepara tu perfil, publica tu primera idea y revisa los módulos.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-lg bg-primary/10 p-4">
-                  <p className="text-xs text-muted-foreground">Publicaciones activas</p>
-                  <p className="text-2xl font-semibold text-foreground">3</p>
+                  <p className="text-xs text-muted-foreground">Tu perfil</p>
+                  <p className="text-xl font-semibold text-foreground">Completa en 2 min</p>
+                  <p className="mt-1 text-xs text-muted-foreground">Añade foto, links y una breve bio.</p>
                 </div>
                 <div className="rounded-lg bg-secondary p-4">
-                  <p className="text-xs text-secondary-foreground">Módulos vistos</p>
-                  <p className="text-2xl font-semibold text-secondary-foreground">5</p>
+                  <p className="text-xs text-secondary-foreground">Recursos descargables</p>
+                  <p className="text-2xl font-semibold text-secondary-foreground">8</p>
+                  <p className="mt-1 text-[11px] text-secondary-foreground/90">Plantillas y guías disponibles tras registrarte.</p>
                 </div>
               </div>
               <div className="rounded-lg border border-dashed border-border/70 bg-muted/40 p-4">
                 <div className="flex items-center gap-3">
                   <BookOpen className="h-5 w-5 text-primary" />
                   <div className="space-y-1">
-                    <p className="text-sm font-medium text-foreground">Siguiente módulo</p>
+                    <p className="text-sm font-medium text-foreground">Comienza aquí</p>
                     <p className="text-sm text-muted-foreground">
-                      Marketing Digital para Emprendimientos
+                      Marketing Digital para Emprendimientos (abre en nueva pestaña)
                     </p>
                   </div>
                 </div>
                 <Button variant="link" className="px-0 text-primary" asChild>
-                  <Link href="#formacion">Abrir módulo</Link>
+                  <Link href="/formacion">Abrir módulo</Link>
                 </Button>
               </div>
               <div className="flex items-center justify-between rounded-lg border border-border/70 bg-background px-4 py-3">
@@ -167,7 +195,7 @@ export default function Home() {
                   <MessageCircle className="h-5 w-5 text-primary" />
                   <div>
                     <p className="text-sm font-medium text-foreground">Chat de asistencia</p>
-                    <p className="text-xs text-muted-foreground">Disponible 24/7 para tus dudas</p>
+                    <p className="text-xs text-muted-foreground">Pide ayuda para publicar o resolver dudas al registrarte.</p>
                   </div>
                 </div>
                 <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -244,16 +272,22 @@ export default function Home() {
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold">Emprendimientos destacados</h2>
             <p className="text-muted-foreground">
-              Ejemplos que ilustran cómo se verán las fichas públicas en el MVP.
+              Casos reales publicados por la comunidad. Explora más con filtros y vistas.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {ventures.map((venture) => (
-              <Card key={venture.title} className="h-full">
+              <Card key={venture.id} className="h-full">
                 <CardHeader className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-base">{venture.title}</CardTitle>
-                    <Badge variant="secondary">{venture.stage}</Badge>
+                    {hasFeatured ? (
+                      <Link href={`/emprendimientos/${venture.id}`} className="text-base font-semibold hover:underline">
+                        {venture.title}
+                      </Link>
+                    ) : (
+                      <CardTitle className="text-base">{venture.title}</CardTitle>
+                    )}
+                    <Badge variant="secondary">{stageLabel[venture.stage] || venture.stage}</Badge>
                   </div>
                   <CardDescription>{venture.summary}</CardDescription>
                 </CardHeader>
@@ -267,6 +301,13 @@ export default function Home() {
               </Card>
             ))}
           </div>
+          <div>
+            <Button asChild variant="outline">
+              <Link href="/emprendimientos" className="flex items-center gap-2">
+                Ver todos <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </section>
 
         <section id="formacion" className="space-y-6">
@@ -279,23 +320,24 @@ export default function Home() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {training.map((item) => (
-              <div
+              <Link
                 key={item}
-                className="rounded-lg border border-border/70 bg-card px-4 py-3 text-sm shadow-sm"
+                href={{ pathname: "/formacion", query: { modulo: item } }}
+                className="rounded-lg border border-border/70 bg-card px-4 py-3 text-sm shadow-sm transition hover:border-primary/60 hover:shadow-md"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium">{item}</span>
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <p className="mt-1 text-muted-foreground">
-                  Abrirá su PDF en nueva pestaña en el paso de formación.
+                  Ir a la página de formación.
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
 
-        <section className="rounded-2xl border border-border/70 bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/20 p-8 shadow-sm">
+        <section className="rounded-2xl border border-border/70 bg-linear-to-r from-primary/10 via-primary/5 to-secondary/20 p-8 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-2">
               <h3 className="text-xl font-semibold">¿Listo para publicar tu emprendimiento?</h3>
@@ -305,10 +347,10 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild>
-                <Link href="/registro">Comenzar</Link>
+                <Link href="/registro" className="text-white">Comenzar</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="#formacion">Ver módulos</Link>
+                <Link href="/formacion">Ver módulos</Link>
               </Button>
             </div>
           </div>

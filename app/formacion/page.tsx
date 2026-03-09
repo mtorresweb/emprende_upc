@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { TrainingCatalogList } from "@/components/training/catalog-list";
@@ -10,6 +11,9 @@ export const dynamic = "force-dynamic";
 
 export default async function TrainingPage() {
   const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
   const catalog = await getTrainingCatalog();
   const progressPaths = session?.user?.id
     ? (

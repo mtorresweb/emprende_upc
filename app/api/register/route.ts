@@ -11,10 +11,22 @@ export const fetchCache = "force-no-store";
 export const dynamicParams = true;
 export const preferredRegion = "auto";
 
+const PROGRAM_OPTIONS = [
+  "contaduria publica",
+  "economia",
+  "administracion de empresas",
+  "ingenieria agroindustrial",
+  "ingenieria ambiental y sanitaria",
+  "ingenieria de sistemas",
+  "tecnologia agropecuaria",
+] as const;
+
 const registerSchema = z.object({
   name: z.string().min(2).max(100),
   email: z.string().email(),
   password: z.string().min(8).max(128),
+  documentNumber: z.string().min(6).max(30),
+  program: z.enum(PROGRAM_OPTIONS),
 });
 
 export async function POST(req: Request) {
@@ -29,7 +41,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name, email, password } = parsed.data;
+    const { name, email, password, documentNumber, program } = parsed.data;
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
@@ -49,6 +61,8 @@ export async function POST(req: Request) {
         profile: {
           create: {
             fullName: name,
+            documentNumber,
+            program,
           },
         },
       },

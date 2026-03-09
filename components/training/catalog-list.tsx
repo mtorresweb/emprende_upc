@@ -40,7 +40,7 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
               <Check className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Módulos vistos</p>
+              <p className="text-sm text-muted-foreground">Recursos vistos</p>
               <p className="text-lg font-semibold">
                 {totals.viewed} / {totals.total || 0}
               </p>

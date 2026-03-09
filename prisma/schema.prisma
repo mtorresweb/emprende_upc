@@ -58,6 +58,8 @@ model Profile {
   website    String?
   linkedin   String?
   github     String?
+  documentNumber String?
+  program        String?
   instagram  String?
   roleTitle  String?
   availability Availability @default(NONE)

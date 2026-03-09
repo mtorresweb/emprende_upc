@@ -18,7 +18,52 @@ const ALLOWED = new Set([
 
 export function AttachmentsGuard() {
   useEffect(() => {
-    const handler = (ev: Event) => {
+    const PRESERVE_KEY = "preserve-form:";
+
+    const restoreForm = (formId: string) => {
+      try {
+        const raw = localStorage.getItem(`${PRESERVE_KEY}${formId}`);
+        if (!raw) return;
+        const parsed = JSON.parse(raw) as Record<string, string> | null;
+        if (!parsed) return;
+        const formEl = document.getElementById(formId) as HTMLFormElement | null;
+        if (!formEl) return;
+        Object.entries(parsed).forEach(([name, value]) => {
+          const field = formEl.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${CSS.escape(name)}"]`);
+          if (!field) return;
+          if (field instanceof HTMLInputElement && (field.type === "checkbox" || field.type === "radio")) {
+            field.checked = field.value === value;
+          } else {
+            field.value = value;
+          }
+        });
+        localStorage.removeItem(`${PRESERVE_KEY}${formId}`);
+      } catch (err) {
+        console.error("restore form failed", err);
+      }
+    };
+
+    const stashForm = (formId: string) => {
+      try {
+        const formEl = document.getElementById(formId) as HTMLFormElement | null;
+        if (!formEl) return;
+        const data = new FormData(formEl);
+        const payload: Record<string, string> = {};
+        data.forEach((val, key) => {
+          if (val instanceof File) return;
+          payload[key] = val.toString();
+        });
+        localStorage.setItem(`${PRESERVE_KEY}${formId}`, JSON.stringify(payload));
+      } catch (err) {
+        console.error("stash form failed", err);
+      }
+    };
+
+    // Restore any preserved form state on mount
+    const formsWithId = Array.from(document.querySelectorAll<HTMLFormElement>("form[id]"));
+    formsWithId.forEach((form) => restoreForm(form.id));
+
+    const uploadHandler = (ev: Event) => {
       const form = ev.target as HTMLFormElement;
       const inputs = Array.from(
         form.querySelectorAll<HTMLInputElement>('input[type="file"][name="files"]')
@@ -56,10 +101,40 @@ export function AttachmentsGuard() {
     const forms = Array.from(
       document.querySelectorAll<HTMLFormElement>("form[data-attachment-form='true']")
     );
-    forms.forEach((f) => f.addEventListener("submit", handler));
+    forms.forEach((f) => f.addEventListener("submit", uploadHandler));
+
+    const confirmHandler = (ev: Event) => {
+      const form = ev.target as HTMLFormElement;
+      const message = form.dataset.confirm;
+      if (!message) return;
+      const ok = window.confirm(message);
+      if (!ok) {
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+    };
+
+    const confirmForms = Array.from(
+      document.querySelectorAll<HTMLFormElement>("form[data-confirm]")
+    );
+    confirmForms.forEach((f) => f.addEventListener("submit", confirmHandler));
+
+    const preserveForms = Array.from(
+      document.querySelectorAll<HTMLFormElement>("form[data-preserve-form]")
+    );
+    const preserveHandlers: Array<{ form: HTMLFormElement; handler: (ev: Event) => void }> = [];
+    preserveForms.forEach((f) => {
+      const targetId = f.dataset.preserveForm;
+      if (!targetId) return;
+      const handler = () => stashForm(targetId);
+      preserveHandlers.push({ form: f, handler });
+      f.addEventListener("submit", handler);
+    });
 
     return () => {
-      forms.forEach((f) => f.removeEventListener("submit", handler));
+      forms.forEach((f) => f.removeEventListener("submit", uploadHandler));
+      confirmForms.forEach((f) => f.removeEventListener("submit", confirmHandler));
+      preserveHandlers.forEach(({ form, handler }) => form.removeEventListener("submit", handler));
     };
   }, []);
 

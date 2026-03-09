@@ -4,8 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { LayoutDashboard, LogOut, Sparkles, User } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -17,7 +15,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-const links = [{ href: "/formacion", label: "Formación" }];
+const links = [
+  { href: "/", label: "Inicio" },
+  { href: "/emprendimientos", label: "Emprendimientos" },
+  { href: "/formacion", label: "Formación" },
+];
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -27,30 +29,34 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-8">
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+          <div className="flex items-center gap-2 font-semibold text-foreground">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Sparkles className="h-4 w-4" />
             </div>
             <span>Emprende UPC</span>
-          </Link>
-          <Badge variant="secondary" className="hidden text-xs md:inline-flex">
-            MVP
-          </Badge>
+          </div>
           <nav className="ml-6 hidden items-center gap-4 md:flex">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors",
-                  pathname === link.href
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {links.map((link) => {
+              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "relative inline-flex items-center pb-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {link.label}
+                  {isActive && (
+                    <span className="pointer-events-none absolute -bottom-1.5 left-1/2 h-[3px] w-10 -translate-x-1/2 rounded-full bg-primary" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
         </div>
 

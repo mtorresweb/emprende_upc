@@ -136,6 +136,20 @@ export default async function PerfilPage({
 
   const profile = await prisma.profile.findUnique({
     where: { userId: session.user.id },
+    select: {
+      userId: true,
+      avatarKey: true,
+      roleTitle: true,
+      availability: true,
+      website: true,
+      linkedin: true,
+      github: true,
+      instagram: true,
+      bio: true,
+      interests: true,
+      documentNumber: true,
+      program: true,
+    },
   });
 
   const saveProfileAction = saveProfile.bind(null, session.user.id);
@@ -164,6 +178,9 @@ export default async function PerfilPage({
             <Badge variant="secondary" className="uppercase">
               {session.user.role}
             </Badge>
+            {profile?.program && (
+              <Badge variant="outline" className="font-medium">{profile.program}</Badge>
+            )}
           </div>
 
           <form action={saveProfileAction} className="space-y-6">
