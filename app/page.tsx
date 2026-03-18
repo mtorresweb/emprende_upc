@@ -21,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { WelcomeDialog } from "@/components/home/welcome-dialog";
 
 const features = [
   {
@@ -118,7 +117,6 @@ export default async function Home() {
   return (
     <div className="bg-linear-to-b from-background via-background/80 to-secondary/20">
       <main className="mx-auto flex max-w-6xl flex-col gap-16 px-6 py-16 md:gap-20 md:px-10 lg:px-16">
-        <WelcomeDialog />
         <section className="grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
             
