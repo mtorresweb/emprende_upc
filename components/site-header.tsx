@@ -23,6 +23,8 @@ const links = [
   { href: "/formacion", label: "Formación" },
 ];
 
+const desktopLinks = links.filter((link) => link.href !== "/");
+
 export function SiteHeader() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
@@ -79,8 +81,21 @@ export function SiteHeader() {
             </Sheet>
           </div>
 
-          <nav className="ml-6 hidden items-center gap-4 md:flex">
-            {links.map((link) => {
+          <Link
+            href="/"
+            className="hidden h-10 items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold text-foreground hover:text-foreground md:flex"
+            aria-label="Emprende UPC"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <span className="leading-tight">
+              <span className="block text-sm font-semibold">Emprende UPC</span>
+            </span>
+          </Link>
+
+          <nav className="ml-4 hidden items-center gap-4 md:flex">
+            {desktopLinks.map((link) => {
               const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
               return (
                 <Link
@@ -88,7 +103,7 @@ export function SiteHeader() {
                   href={link.href}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "relative inline-flex items-center pb-2 text-sm font-medium transition-colors",
+                    "relative inline-flex h-10 items-center px-1 text-sm font-medium transition-colors",
                     isActive
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
@@ -96,7 +111,7 @@ export function SiteHeader() {
                 >
                   {link.label}
                   {isActive && (
-                    <span className="pointer-events-none absolute -bottom-1.5 left-1/2 h-[3px] w-10 -translate-x-1/2 rounded-full bg-primary" />
+                    <span className="pointer-events-none absolute bottom-0 left-1/2 h-[3px] w-10 -translate-x-1/2 rounded-full bg-primary" />
                   )}
                 </Link>
               );
@@ -115,9 +130,9 @@ export function SiteHeader() {
                   aria-label="Menú de usuario"
                 >
                   <Avatar>
-                    <AvatarImage alt="Avatar" src={(session.user as any).avatarKey || undefined} />
+                    <AvatarImage alt="Avatar" src={(session?.user as any)?.avatarKey || undefined} />
                     <AvatarFallback>
-                      {session.user.name?.[0] || session.user.email?.[0] || "U"}
+                      {session?.user?.name?.[0] || session?.user?.email?.[0] || "U"}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
