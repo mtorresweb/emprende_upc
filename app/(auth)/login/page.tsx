@@ -85,6 +85,9 @@ export default function LoginPage() {
           <p className="mt-4 text-sm text-muted-foreground">
             ¿No tienes cuenta? <Link className="text-primary" href="/registro">Regístrate</Link>
           </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            ¿Olvidaste tu contraseña? <Link className="text-primary" href="/reset">Recupérala aquí</Link>
+          </p>
         </CardContent>
       </Card>
     </div>

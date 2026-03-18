@@ -1,7 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
   Lightbulb,
   MessageCircle,
   Rocket,
@@ -121,9 +121,7 @@ export default async function Home() {
         <WelcomeDialog />
         <section className="grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
-            <Badge className="w-fit" variant="secondary">
-              Emprende UPC · MVP
-            </Badge>
+            
             <div className="space-y-4">
               <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
                 Publica, visibiliza y potencia los emprendimientos estudiantiles.
@@ -152,55 +150,19 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <Card className="border-border/80 bg-card/80 backdrop-blur">
-            <CardHeader className="space-y-2">
-                <CardTitle className="flex items-center gap-2 text-xl">
-                <Sparkles className="h-5 w-5 text-primary" />
-                Vista previa del panel
-              </CardTitle>
-              <CardDescription>
-                Así se verá cuando te registres: prepara tu perfil, publica tu primera idea y revisa los módulos.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-lg bg-primary/10 p-4">
-                  <p className="text-xs text-muted-foreground">Tu perfil</p>
-                  <p className="text-xl font-semibold text-foreground">Completa en 2 min</p>
-                  <p className="mt-1 text-xs text-muted-foreground">Añade foto, links y una breve bio.</p>
-                </div>
-                <div className="rounded-lg bg-secondary p-4">
-                  <p className="text-xs text-secondary-foreground">Recursos descargables</p>
-                  <p className="text-2xl font-semibold text-secondary-foreground">8</p>
-                  <p className="mt-1 text-[11px] text-secondary-foreground/90">Plantillas y guías disponibles tras registrarte.</p>
-                </div>
-              </div>
-              <div className="rounded-lg border border-dashed border-border/70 bg-muted/40 p-4">
-                <div className="flex items-center gap-3">
-                  <BookOpen className="h-5 w-5 text-primary" />
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-foreground">Comienza aquí</p>
-                    <p className="text-sm text-muted-foreground">
-                      Marketing Digital para Emprendimientos (abre en nueva pestaña)
-                    </p>
-                  </div>
-                </div>
-                <Button variant="link" className="px-0 text-primary" asChild>
-                  <Link href="/formacion">Abrir módulo</Link>
-                </Button>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-border/70 bg-background px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <MessageCircle className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Chat de asistencia</p>
-                    <p className="text-xs text-muted-foreground">Pide ayuda para publicar o resolver dudas al registrarte.</p>
-                  </div>
-                </div>
-                <ArrowRight className="h-4 w-4 text-muted-foreground" />
-              </div>
-            </CardContent>
-          </Card>
+          <div className="relative overflow-hidden rounded-3xl border border-border/80 bg-card/80 shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 via-transparent to-secondary/15" aria-hidden />
+            <div className="relative aspect-[4/3] w-full">
+              <Image
+                src="/upc%20ghibli.png"
+                alt="Emprende UPC ilustración"
+                fill
+                className="object-cover"
+                priority
+                sizes="(min-width: 1024px) 420px, 100vw"
+              />
+            </div>
+          </div>
         </section>
 
         <section className="grid gap-6 rounded-2xl border border-border/70 bg-card/50 p-6 shadow-sm md:grid-cols-3">

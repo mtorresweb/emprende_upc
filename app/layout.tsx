@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { Providers } from "@/components/providers";
 import { SiteHeader } from "@/components/site-header";
+import { FloatingChat } from "@/components/chat/floating-chat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <div className="min-h-screen bg-background">
             <SiteHeader />
             <main>{children}</main>
+            <FloatingChat />
           </div>
         </Providers>
       </body>
