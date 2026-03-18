@@ -132,9 +132,6 @@ export default async function Home() {
               </p>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button asChild>
-                <Link href="/registro" className="text-amber-50">Registrarme</Link>
-              </Button>
               <Button variant="outline" asChild>
                 <Link href="#caracteristicas">Ver características</Link>
               </Button>
@@ -337,24 +334,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-border/70 bg-linear-to-r from-primary/10 via-primary/5 to-secondary/20 p-8 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="space-y-2">
-              <h3 className="text-xl font-semibold">¿Listo para publicar tu emprendimiento?</h3>
-              <p className="text-muted-foreground">
-                Crea tu cuenta, completa tu ficha y comparte tus avances con la comunidad.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild>
-                <Link href="/registro" className="text-white">Comenzar</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href="/formacion">Ver módulos</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+        {/* Sección de CTA final removida según solicitud */}
       </main>
     </div>
   );

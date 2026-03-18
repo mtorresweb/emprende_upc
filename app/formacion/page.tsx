@@ -15,14 +15,10 @@ export default async function TrainingPage() {
     redirect("/login");
   }
   const catalog = await getTrainingCatalog();
-  const progressPaths = session?.user?.id
-    ? (
-        await prisma.trainingProgress.findMany({
-          where: { userId: session.user.id },
-          select: { resourcePath: true },
-        })
-      ).map((p) => p.resourcePath)
-    : [];
+  const progressPaths = await prisma.trainingProgress.findMany({
+    where: { userId: session.user.id },
+    select: { resourcePath: true },
+  });
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 md:px-8">
@@ -45,7 +41,7 @@ export default async function TrainingPage() {
         </p>
       )}
 
-      <TrainingCatalogList catalog={catalog} initialSeen={progressPaths} />
+      <TrainingCatalogList catalog={catalog} initialSeen={progressPaths.map((p) => p.resourcePath)} />
     </div>
   );
 }

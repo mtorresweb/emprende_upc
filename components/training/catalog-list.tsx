@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { Check } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,13 +14,24 @@ type Props = {
 };
 
 export function TrainingCatalogList({ catalog, initialSeen }: Props) {
-  const [seen, setSeen] = useState<Set<string>>(new Set(initialSeen));
+  const validPaths = useMemo(
+    () => new Set(catalog.flatMap((cat) => cat.resources.map((r) => r.path))),
+    [catalog]
+  );
+  const totalResources = validPaths.size;
+
+  // Seed seen with server progress, filtered to valid resources only.
+  const [seen, setSeen] = useState<Set<string>>(() => {
+    const filtered = initialSeen.filter((p) => validPaths.has(p));
+    return new Set(filtered);
+  });
+
+  const isMobile = typeof window !== "undefined" && /Mobi|Android/i.test(window.navigator.userAgent);
 
   const totals = useMemo(() => {
-    const total = catalog.reduce((sum, c) => sum + c.resources.length, 0);
     const viewed = seen.size;
-    return { total, viewed };
-  }, [catalog, seen]);
+    return { total: totalResources, viewed };
+  }, [seen, totalResources]);
 
   const markSeen = (path: string) => {
     setSeen((prev) => {
@@ -49,12 +60,12 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
         </Card>
       </div>
 
-      {catalog.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No se encontraron recursos.</p>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2">
-          {catalog.map((cat) => (
-            <Card key={cat.category} className="border-border/80 bg-card/90 shadow-sm">
+        {catalog.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No se encontraron recursos.</p>
+        ) : (
+          <div className="flex flex-col gap-6">
+            {catalog.map((cat) => (
+              <Card key={cat.category} className="border-border/80 bg-card/90 shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between text-lg">
                   {cat.category}
@@ -82,13 +93,30 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
               </CardHeader>
               <CardContent className="space-y-3">
                 {cat.resources.map((res) => (
-                  <Link
+                  <button
                     key={res.path}
-                    href={`/formacion/open?path=${encodeURIComponent(res.path)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => markSeen(res.path)}
-                    className="flex items-center justify-between rounded-md border border-border/60 bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
+                    type="button"
+                    onClick={async () => {
+                      const url = `/formacion/open?path=${encodeURIComponent(res.path)}`;
+                      const resp = await fetch(url, { method: "POST" });
+                      if (!resp.ok) {
+                        toast.error("No se pudo registrar el avance", { description: res.label });
+                        return;
+                      }
+
+                      markSeen(res.path);
+
+                      if (isMobile) {
+                        toast("Descargando módulo", {
+                          description: res.label,
+                          position: "top-center",
+                        });
+                        window.location.href = url;
+                      } else {
+                        window.open(url, "_blank", "noopener,noreferrer");
+                      }
+                    }}
+                    className="flex w-full items-center justify-between rounded-md border border-border/60 bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
                   >
                     <span className="flex items-center gap-2">
                       {seen.has(res.path) && (
@@ -98,8 +126,8 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
                       )}
                       <span>{res.label}</span>
                     </span>
-                    <span className="text-xs text-muted-foreground">Abrir</span>
-                  </Link>
+                    <span className="text-xs text-muted-foreground">{isMobile ? "Descargar" : "Abrir"}</span>
+                  </button>
                 ))}
               </CardContent>
             </Card>

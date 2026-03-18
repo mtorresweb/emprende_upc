@@ -31,11 +31,35 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
   }
 
+  // Encode every path segment to avoid issues with spaces/diacritics when opening on mobile browsers.
+  const encodedPath = sanitized
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  const target = new URL(`/${encodedPath}`, req.url);
+  return NextResponse.redirect(target);
+}
+
+export async function POST(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const resource = searchParams.get("path");
+
+  if (!resource) {
+    return NextResponse.json({ error: "Falta path" }, { status: 400 });
+  }
+
+  const sanitized = sanitizeResource(resource);
+  if (!sanitized.startsWith("modulos de formacion/")) {
+    return NextResponse.json({ error: "Recurso inválido" }, { status: 400 });
+  }
+
+  if (!isValidTrainingPath(sanitized)) {
+    return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+  }
+
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
-    const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("redirectTo", `/formacion/open?path=${encodeURIComponent(sanitized)}`);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
   await prisma.trainingProgress.upsert({
@@ -56,6 +80,5 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  const target = new URL(`/${encodeURI(sanitized)}`, req.url);
-  return NextResponse.redirect(target);
+  return NextResponse.json({ ok: true });
 }

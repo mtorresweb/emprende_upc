@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Fuse from "fuse.js";
 
@@ -39,11 +38,10 @@ export default async function EmprendimientosPage({
   const stageValue = stageFilter ?? "ALL";
 
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) redirect("/login");
 
   const venturesBase = await prisma.venture.findMany({
     where: {
-      ownerId: session.user.id,
+      published: true,
       ...(stageFilter ? { stage: stageFilter } : {}),
     },
     orderBy: { createdAt: "desc" },
@@ -95,11 +93,17 @@ export default async function EmprendimientosPage({
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Explorar</p>
           <h1 className="text-3xl font-semibold text-foreground">Emprendimientos</h1>
-          <p className="text-sm text-muted-foreground">Filtra por etapa, busca por texto y cambia la vista.</p>
+          <p className="text-sm text-muted-foreground">Emprendimientos publicados por toda la comunidad. Filtra por etapa, busca por texto y cambia la vista.</p>
         </div>
-        <Button asChild variant="secondary">
-          <Link href="/panel">Publicar nuevo</Link>
-        </Button>
+        {session?.user?.id ? (
+          <Button asChild variant="secondary">
+            <Link href="/panel">Publicar nuevo</Link>
+          </Button>
+        ) : (
+          <Button asChild variant="secondary">
+            <Link href="/login">Ingresar para publicar</Link>
+          </Button>
+        )}
       </div>
 
       <form

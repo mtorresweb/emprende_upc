@@ -77,7 +77,7 @@ export default async function PanelPage({
       </Card>
 
       <div className="grid items-start gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-        <Card className="w-full min-w-0 border-border/70 bg-card/90 shadow-sm">
+        <Card className="order-2 w-full min-w-0 border-border/70 bg-card/90 shadow-sm lg:order-1">
           <CardHeader className="space-y-2 pb-2">
             <CardTitle className="text-xl">Mis emprendimientos</CardTitle>
             <CardDescription>Publica y edita tus proyectos.</CardDescription>
@@ -114,7 +114,10 @@ export default async function PanelPage({
           </CardContent>
         </Card>
 
-        <Card className="w-full min-w-0 border-border/70 bg-card/90 shadow-sm md:sticky md:top-6" id="nuevo">
+        <Card
+          className="order-1 w-full min-w-0 border-border/70 bg-card/90 shadow-sm md:sticky md:top-6 lg:order-2"
+          id="nuevo"
+        >
           <CardHeader className="space-y-2 pb-2">
             <CardTitle className="text-xl">Publicar nuevo</CardTitle>
             <CardDescription>Completa la ficha básica. Puedes adjuntar un archivo inicial (opcional).</CardDescription>

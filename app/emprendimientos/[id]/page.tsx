@@ -60,7 +60,7 @@ export default async function VenturePublicPage({
 
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-12 md:px-10 lg:px-16">
-      <div className="overflow-hidden rounded-2xl">
+      <div className="mb-6 overflow-hidden rounded-2xl md:mb-8">
         {coverUrl ? (
           <img
             src={coverUrl}

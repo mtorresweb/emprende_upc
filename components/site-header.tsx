@@ -6,6 +6,8 @@ import { signOut, useSession } from "next-auth/react";
 import { LayoutDashboard, LogOut, Sparkles, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,17 +26,59 @@ const links = [
 export function SiteHeader() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
+  const isAuthed = status === "authenticated" && !!session?.user;
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-8">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 font-semibold text-foreground">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Sparkles className="h-4 w-4" />
-            </div>
-            <span>Emprende UPC</span>
+          <div className="flex md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button className="flex items-center gap-2 rounded-lg border border-border/60 bg-secondary/70 px-3 py-2 text-sm font-semibold text-foreground shadow-sm">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Sparkles className="h-4 w-4" />
+                  </div>
+                  <span>Emprende UPC</span>
+                </button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72">
+                <div className="flex items-center gap-3 pb-4">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Sparkles className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-foreground">Emprende UPC</span>
+                    <span className="text-xs text-muted-foreground">Navegación</span>
+                  </div>
+                </div>
+                <Separator className="mb-4" />
+                <div className="flex flex-col gap-1">
+                  {links.map((link) => {
+                    const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+                    return (
+                      <SheetClose asChild key={link.href}>
+                        <Link
+                          href={link.href}
+                          aria-current={isActive ? "page" : undefined}
+                          className={cn(
+                            "flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                            isActive
+                              ? "bg-primary/10 text-foreground"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          )}
+                        >
+                          <span>{link.label}</span>
+                          {isActive && <span className="h-2 w-2 rounded-full bg-primary" />}
+                        </Link>
+                      </SheetClose>
+                    );
+                  })}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
+
           <nav className="ml-6 hidden items-center gap-4 md:flex">
             {links.map((link) => {
               const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
@@ -61,7 +105,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2">
-          {status === "authenticated" && session?.user ? (
+          {isAuthed ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -112,7 +156,7 @@ export function SiteHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
+          ) : status === "unauthenticated" ? (
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/login">Ingresar</Link>
@@ -121,6 +165,8 @@ export function SiteHeader() {
                 <Link href="/registro">Registrar</Link>
               </Button>
             </div>
+          ) : (
+            <div className="h-10 w-10 animate-pulse rounded-full border border-border/60 bg-secondary/70" aria-hidden />
           )}
         </div>
       </div>

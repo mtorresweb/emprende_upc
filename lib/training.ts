@@ -79,6 +79,11 @@ const catalogDefinition: CategoryDefinition[] = [
     category: "General",
     files: ["Mentalidad_Innovadora_Presentacion_Creativa.pptx"],
   },
+  {
+    category: "Recursos y oportunidades (Colombia)",
+    dir: "Recursos Colombia",
+    files: ["Fuentes-y-eventos-Colombia.html"],
+  },
 ];
 
 function buildCatalog(): TrainingCategory[] {
