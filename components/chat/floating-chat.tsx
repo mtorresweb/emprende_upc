@@ -47,7 +47,7 @@ export function FloatingChat() {
   return (
     <div className="fixed bottom-4 right-4 z-[60] flex flex-col items-end gap-3">
       {open && (
-        <div className="w-80 rounded-2xl border border-border/70 bg-card/95 p-3 shadow-xl backdrop-blur">
+        <div className="w-80 rounded-2xl border border-border/70 bg-card/95 p-3 shadow-xl backdrop-blur overflow-hidden">
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -59,19 +59,19 @@ export function FloatingChat() {
               <X className="h-4 w-4" />
             </Button>
           </div>
-          <div className="mb-3 max-h-64 space-y-2 overflow-y-auto text-sm">
+          <div className="mb-3 max-h-64 w-full space-y-2 overflow-y-auto overflow-x-hidden text-sm">
             {messages.map((m) => (
               <div
                 key={m.id}
                 className={cn(
-                  "rounded-lg px-3 py-2",
+                  "rounded-lg px-3 py-2 max-w-full overflow-hidden",
                   m.role === "user" ? "bg-primary/10 text-foreground" : "bg-muted/70 text-foreground"
                 )}
               >
                 <span className="block text-xs font-semibold text-muted-foreground">
                   {m.role === "user" ? "Tú" : "Asistente"}
                 </span>
-                <span className="block whitespace-pre-wrap leading-relaxed">{m.content}</span>
+                <span className="block whitespace-pre-wrap break-words leading-relaxed">{m.content}</span>
               </div>
             ))}
             {error && <p className="text-xs text-destructive">No se pudo responder. Intenta de nuevo.</p>}
