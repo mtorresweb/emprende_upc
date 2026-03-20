@@ -45,14 +45,12 @@ export async function POST(req: Request) {
 
     const completion = await client.models.generateContent({
       model: modelId,
-      systemInstruction: {
-        parts: [{ text: systemPrompt }],
-      },
       contents: chatMessages.map((m) => ({
         role: m.role === "assistant" ? "model" : "user",
         parts: [{ text: m.content }],
       })),
-      generationConfig: {
+      config: {
+        systemInstruction: { parts: [{ text: systemPrompt }] },
         maxOutputTokens: 300,
         temperature: 0.1,
         topP: 0.8,
@@ -61,10 +59,8 @@ export async function POST(req: Request) {
     });
 
     const reply = (() => {
-      if (typeof completion.text === "function") return completion.text();
       if (typeof completion.text === "string") return completion.text;
-      if (completion.response?.text) return completion.response.text;
-      const parts = completion.response?.candidates?.[0]?.content?.parts;
+      const parts = completion.candidates?.[0]?.content?.parts;
       if (Array.isArray(parts)) {
         return parts
           .map((p: any) => p?.text)
