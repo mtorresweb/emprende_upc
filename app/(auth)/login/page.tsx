@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
@@ -30,6 +30,11 @@ export default function LoginPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Garantiza la cuenta admin por si aún no existe.
+    fetch("/api/admin/bootstrap", { method: "POST" }).catch(() => undefined);
+  }, []);
 
   const onSubmit = async (data: LoginForm) => {
     setSubmitting(true);

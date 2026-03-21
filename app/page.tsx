@@ -117,47 +117,16 @@ export default async function Home() {
   return (
     <div className="bg-linear-to-b from-background via-background/80 to-secondary/20">
       <main className="mx-auto flex max-w-6xl flex-col gap-16 px-6 py-16 md:gap-20 md:px-10 lg:px-16">
-        <section className="grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-6">
-            
-            <div className="space-y-4">
-              <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
-                Publica, visibiliza y potencia los emprendimientos estudiantiles.
-              </h1>
-              <p className="max-w-2xl text-lg text-muted-foreground">
-                Regístrate, publica tu emprendimiento, accede a formación en PDF y
-                recibe ayuda inmediata con el chatbot institucional.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Button variant="outline" asChild>
-                <Link href="#caracteristicas">Ver características</Link>
-              </Button>
-              <Button variant="secondary" asChild>
-                <Link href="/emprendimientos">Ver emprendimientos</Link>
-              </Button>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-secondary-foreground shadow-sm">
-                <Sparkles className="h-4 w-4" />
-                Publicación rápida
-              </div>
-              <div className="flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-secondary-foreground shadow-sm">
-                <ShieldCheck className="h-4 w-4" />
-                Datos seguros
-              </div>
-            </div>
-          </div>
-          <div className="relative overflow-hidden rounded-3xl border border-border/80 bg-card/80 shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 via-transparent to-secondary/15" aria-hidden />
-            <div className="relative aspect-[4/3] w-full">
+        <section className="w-full">
+          <div className="relative flex w-full justify-center p-4 md:p-6">
+            <div className="relative aspect-[16/10] w-full max-w-5xl">
               <Image
-                src="/upc%20ghibli.png"
+                src="/hero.jpeg"
                 alt="Emprende UPC ilustración"
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
-                sizes="(min-width: 1024px) 420px, 100vw"
+                sizes="100vw"
               />
             </div>
           </div>

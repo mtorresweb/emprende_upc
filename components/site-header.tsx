@@ -152,6 +152,17 @@ export function SiteHeader() {
                     <span className="text-sm">Panel</span>
                   </Link>
                 </DropdownMenuItem>
+                {session?.user?.role === "ADMIN" && (
+                  <DropdownMenuItem
+                    asChild
+                    className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-primary/15 focus:bg-primary/15 focus:text-foreground focus-visible:outline-none"
+                  >
+                    <Link href="/admin" className="flex w-full items-center gap-3">
+                      <LayoutDashboard className="h-4 w-4 text-primary" />
+                      <span className="text-sm">Administrar</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem
                   asChild
                   className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-primary/15 focus:bg-primary/15 focus:text-foreground focus-visible:outline-none"
