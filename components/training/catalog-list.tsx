@@ -1,8 +1,9 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,10 +15,12 @@ type Props = {
 };
 
 export function TrainingCatalogList({ catalog, initialSeen }: Props) {
+  const router = useRouter();
   const validPaths = useMemo(
     () => new Set(catalog.flatMap((cat) => cat.resources.map((r) => r.path))),
     [catalog]
   );
+  const embeddedPath = "modulos de formacion/Recursos Colombia/Fuentes-y-eventos-Colombia.html";
   const totalResources = validPaths.size;
 
   // Seed seen with server progress, filtered to valid resources only.
@@ -71,7 +74,7 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
                   {cat.category}
                   <Badge variant="outline">{cat.resources.length} recursos</Badge>
                 </CardTitle>
-                <CardDescription>Abre cualquier módulo en una pestaña nueva.</CardDescription>
+                <CardDescription>Los módulos se abren en pestaña nueva; algunos se muestran dentro de la página.</CardDescription>
                 {(() => {
                   const completed = cat.resources.filter((r) => seen.has(r.path)).length;
                   const percent = Math.round((completed / (cat.resources.length || 1)) * 100);
@@ -97,8 +100,13 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
                     key={res.path}
                     type="button"
                     onClick={async () => {
-                      const url = `/formacion/open?path=${encodeURIComponent(res.path)}`;
-                      const resp = await fetch(url, { method: "POST" });
+                      const postUrl = `/formacion/open?path=${encodeURIComponent(res.path)}`;
+                      const isEmbedded = res.path === embeddedPath;
+                      const navigateUrl = isEmbedded
+                        ? `/formacion/recurso?path=${encodeURIComponent(res.path)}`
+                        : postUrl;
+
+                      const resp = await fetch(postUrl, { method: "POST" });
                       if (!resp.ok) {
                         toast.error("No se pudo registrar el avance", { description: res.label });
                         return;
@@ -106,14 +114,19 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
 
                       markSeen(res.path);
 
+                      if (isEmbedded) {
+                        router.push(navigateUrl);
+                        return;
+                      }
+
                       if (isMobile) {
                         toast("Descargando módulo", {
                           description: res.label,
                           position: "top-center",
                         });
-                        window.location.href = url;
+                        window.location.href = postUrl;
                       } else {
-                        window.open(url, "_blank", "noopener,noreferrer");
+                        window.open(postUrl, "_blank", "noopener,noreferrer");
                       }
                     }}
                     className="flex w-full items-center justify-between rounded-md border border-border/60 bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"

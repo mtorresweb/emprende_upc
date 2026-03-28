@@ -12,13 +12,16 @@ export const dynamicParams = true;
 export const preferredRegion = "auto";
 
 const PROGRAM_OPTIONS = [
-  "contaduria publica",
-  "economia",
-  "administracion de empresas",
-  "ingenieria agroindustrial",
-  "ingenieria ambiental y sanitaria",
-  "ingenieria de sistemas",
-  "tecnologia agropecuaria",
+  "Administración de Empresas",
+  "Contaduría Pública",
+  "Derecho",
+  "Economía",
+  "Licenciatura en Literatura y Lengua Castellana",
+  "Ingeniería Ambiental y Sanitaria",
+  "Ingeniería de Sistemas",
+  "Ingeniería Agroindustrial",
+  "Ingeniería Agropecuaria",
+  "Licenciatura en Educación Física, Recreación y Deporte",
 ] as const;
 
 const EMAIL_DOMAIN = "unicesar.edu.co";

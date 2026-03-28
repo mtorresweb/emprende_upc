@@ -47,11 +47,7 @@ const training = [
   "Modelos de Negocio",
 ];
 
-const stats = [
-  { label: "Emprendimientos en piloto", value: "12" },
-  { label: "Horas de formación", value: "24+" },
-  { label: "Módulos disponibles", value: "4" },
-];
+
 
 const steps = [
   {
@@ -79,6 +75,22 @@ const stageLabel: Record<string, string> = {
 };
 
 export default async function Home() {
+  // Estadísticas reales
+  const [ventureCount, moduleCount] = await Promise.all([
+    prisma.venture.count({ where: { published: true } }),
+    prisma.trainingModule.count(),
+  ]);
+
+
+  // Evita redefinir moduleCount si ya existe arriba
+  const userCount = await prisma.user.count();
+
+  const stats = [
+    { label: "Emprendimientos en piloto", value: String(ventureCount) },
+    { label: "Usuarios registrados", value: String(userCount) },
+    { label: "Módulos de formación", value: String(moduleCount) },
+  ];
+
   const featured = await prisma.venture.findMany({
     where: { published: true },
     orderBy: { createdAt: "desc" },
@@ -87,51 +99,24 @@ export default async function Home() {
   });
 
   const hasFeatured = featured.length > 0;
-
-  const ventures = hasFeatured
-    ? featured
-    : [
-        {
-          id: "#biopack",
-          title: "BioPack",
-          stage: "MVP",
-          summary: "Packaging compostable para e-commerce locales.",
-          tags: ["Sostenible", "D2C"],
-        },
-        {
-          id: "#tutorai",
-          title: "TutorAI",
-          stage: "PROTOTYPE",
-          summary: "Asistente de estudio para cursos intro de ingeniería.",
-          tags: ["EdTech", "IA"],
-        },
-        {
-          id: "#mercadito",
-          title: "Mercadito UPC",
-          stage: "IDEA",
-          summary: "Marketplace de productos hechos por estudiantes.",
-          tags: ["Marketplace", "Local"],
-        },
-      ];
+  const ventures = hasFeatured ? featured : [];
 
   return (
     <div className="bg-linear-to-b from-background via-background/80 to-secondary/20">
-      <main className="mx-auto flex max-w-6xl flex-col gap-16 px-6 py-16 md:gap-20 md:px-10 lg:px-16">
-        <section className="w-full">
-          <div className="relative flex w-full justify-center p-4 md:p-6">
-            <div className="relative aspect-[16/10] w-full max-w-5xl">
-              <Image
-                src="/hero.jpeg"
-                alt="Emprende UPC ilustración"
-                fill
-                className="object-contain"
-                priority
-                sizes="100vw"
-              />
-            </div>
-          </div>
-        </section>
+      <section className="relative w-full overflow-hidden pt-6 md:pt-10 lg:pt-12">
+        <div className="relative h-[260px] w-full overflow-hidden rounded-3xl shadow-lg md:h-[420px] lg:h-[520px]">
+          <Image
+            src="/portrait.jpg"
+            alt="Emprende UPC portada"
+            fill
+            className="rounded-3xl object-contain"
+            priority
+            sizes="100vw"
+          />
+        </div>
+      </section>
 
+      <main className="mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-16 pt-12 md:gap-20 md:px-10 lg:px-16">
         <section className="grid gap-6 rounded-2xl border border-border/70 bg-card/50 p-6 shadow-sm md:grid-cols-3">
           {stats.map((item) => (
             <div key={item.label} className="space-y-2">
@@ -203,39 +188,46 @@ export default async function Home() {
               Casos reales publicados por la comunidad. Explora más con filtros y vistas.
             </p>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {ventures.map((venture) => (
-              <Card key={venture.id} className="h-full">
-                <CardHeader className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    {hasFeatured ? (
-                      <Link href={`/emprendimientos/${venture.id}`} className="text-base font-semibold hover:underline">
-                        {venture.title}
-                      </Link>
-                    ) : (
-                      <CardTitle className="text-base">{venture.title}</CardTitle>
-                    )}
-                    <Badge variant="secondary">{stageLabel[venture.stage] || venture.stage}</Badge>
-                  </div>
-                  <CardDescription>{venture.summary}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-wrap gap-2">
-                  {venture.tags.map((tag) => (
-                    <Badge key={tag} variant="outline">
-                      {tag}
-                    </Badge>
-                  ))}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div>
-            <Button asChild variant="outline">
-              <Link href="/emprendimientos" className="flex items-center gap-2">
-                Ver todos <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
+          {hasFeatured ? (
+            <>
+              <div className="grid gap-4 md:grid-cols-3">
+                {ventures.map((venture) => (
+                  <Card key={venture.id} className="h-full">
+                    <CardHeader className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Link href={`/emprendimientos/${venture.id}`} className="text-base font-semibold hover:underline">
+                          {venture.title}
+                        </Link>
+                        <Badge variant="secondary">{stageLabel[venture.stage] || venture.stage}</Badge>
+                      </div>
+                      <CardDescription>{venture.summary}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap gap-2">
+                      {venture.tags.map((tag) => (
+                        <Badge key={tag} variant="outline">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <div>
+                <Button asChild variant="outline">
+                  <Link href="/emprendimientos" className="flex items-center gap-2">
+                    Ver todos <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </>
+          ) : (
+            <Card className="border-dashed border-border/80 bg-card/70 text-center">
+              <CardHeader>
+                <CardTitle className="text-lg">Aún no hay emprendimientos publicados</CardTitle>
+                <CardDescription>Publica el primero para que aparezca aquí.</CardDescription>
+              </CardHeader>
+            </Card>
+          )}
         </section>
 
         <section id="formacion" className="space-y-6">
