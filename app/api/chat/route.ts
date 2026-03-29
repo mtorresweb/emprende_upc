@@ -1,8 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
-
-// Gemini client picks up GEMINI_API_KEY from env; still allow explicit
-const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+import { openai } from "./openai";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -40,41 +37,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Mensaje vacío" }, { status: 400 });
     }
 
-    const modelIdRaw = process.env.GEMINI_MODEL_ID || "gemini-3-flash-preview";
-    const modelId = modelIdRaw.startsWith("models/") ? modelIdRaw : `models/${modelIdRaw}`;
-
-    const completion = await client.models.generateContent({
-      model: modelId,
-      contents: chatMessages.map((m) => ({
-        role: m.role === "assistant" ? "model" : "user",
-        parts: [{ text: m.content }],
-      })),
-      config: {
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        maxOutputTokens: 300,
-        temperature: 0.1,
-        topP: 0.8,
-        responseMimeType: "text/plain",
-      },
+    // Usar OpenAI Chat Completion
+    const completion = await openai.chat.completions.create({
+      model: process.env.OPENAI_MODEL_ID || "gpt-4o",
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...chatMessages.map((m) => ({ role: m.role, content: m.content })),
+      ],
+      max_tokens: 300,
+      temperature: 0.1,
+      top_p: 0.8,
     });
 
-    const reply = (() => {
-      if (typeof completion.text === "string") return completion.text;
-      const parts = completion.candidates?.[0]?.content?.parts;
-      if (Array.isArray(parts)) {
-        return parts
-          .map((p: any) => p?.text)
-          .filter((t: any): t is string => typeof t === "string")
-          .join("\n");
-      }
-      return "";
-    })();
+    const reply = completion.choices?.[0]?.message?.content || "";
 
     if (!reply.trim()) {
       return NextResponse.json({ error: "No se pudo generar respuesta" }, { status: 502 });
     }
 
-    return NextResponse.json({ reply, model: modelId });
+    return NextResponse.json({ reply, model: completion.model });
   } catch (err: any) {
     console.error("chat error", err);
     const status = err?.status === 429 ? 429 : 500;

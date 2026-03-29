@@ -35,7 +35,7 @@ export default async function NuevoEmprendimientoPage() {
       {/* Sugerencia y botón para quiz de etapa */}
       <div className="mb-6 flex flex-row items-center gap-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-foreground shadow-sm">
         <span className="font-medium text-primary flex-1 min-w-0 truncate sm:whitespace-normal">¿No sabes en qué etapa está tu proyecto?</span>
-        <div className="flex-shrink-0"><QuizEtapaDialog /></div>
+        <div className="shrink-0"><QuizEtapaDialog /></div>
       </div>
 
       <form action={createVentureAction} className="space-y-8" data-attachment-form="true">
@@ -101,7 +101,7 @@ export default async function NuevoEmprendimientoPage() {
             <CardDescription>Sube una imagen horizontal para la portada pública (opcional).</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <CoverPicker name="cover" />
+            <CoverPicker />
           </CardContent>
         </Card>
 
