@@ -56,6 +56,27 @@ export async function createVenture(userId: string, formData: FormData) {
         .filter(Boolean)
     : [];
 
+  // Procesar portada si se envía
+  let coverKey: string | undefined = undefined;
+  const coverFile = formData.get("cover") as File | null;
+  if (coverFile && coverFile.size > 0) {
+    if (!IMAGE_TYPES.includes(coverFile.type)) redirect("/panel?error=Formato%20de%20imagen%20no%20permitido.");
+    if (coverFile.size > MAX_FILE_SIZE) redirect("/panel?error=Imagen%20supera%208MB.");
+    if (!process.env.BLOB_READ_WRITE_TOKEN) redirect("/panel?error=Falta%20BLOB_READ_WRITE_TOKEN");
+    try {
+      const ext = coverFile.name.split(".").pop() || "jpg";
+      const blob = await put(`covers/new-${userId}-${Date.now()}.${ext}`, coverFile, {
+        access: "public",
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+        contentType: coverFile.type || undefined,
+      });
+      coverKey = blob.url;
+    } catch (err) {
+      console.error("cover upload error", err);
+      redirect("/panel?error=No%20se%20pudo%20subir%20la%20portada.");
+    }
+  }
+
   const venture = await prisma.venture.create({
     data: {
       title: parsed.data.title,
@@ -63,6 +84,7 @@ export async function createVenture(userId: string, formData: FormData) {
       stage: parsed.data.stage,
       tags,
       ownerId: userId,
+      coverKey: coverKey ?? undefined,
     },
   });
 

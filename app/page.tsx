@@ -74,23 +74,9 @@ const stageLabel: Record<string, string> = {
   GROWTH: "Crecimiento",
 };
 
+
 export default async function Home() {
-  // Estadísticas reales
-  const [ventureCount, moduleCount] = await Promise.all([
-    prisma.venture.count({ where: { published: true } }),
-    prisma.trainingModule.count(),
-  ]);
-
-
-  // Evita redefinir moduleCount si ya existe arriba
-  const userCount = await prisma.user.count();
-
-  const stats = [
-    { label: "Emprendimientos en piloto", value: String(ventureCount) },
-    { label: "Usuarios registrados", value: String(userCount) },
-    { label: "Módulos de formación", value: String(moduleCount) },
-  ];
-
+  // Obtener emprendimientos destacados
   const featured = await prisma.venture.findMany({
     where: { published: true },
     orderBy: { createdAt: "desc" },
@@ -104,7 +90,7 @@ export default async function Home() {
   return (
     <div className="bg-linear-to-b from-background via-background/80 to-secondary/20">
       <section className="relative w-full overflow-hidden pt-6 md:pt-10 lg:pt-12">
-        <div className="relative h-[260px] w-full overflow-hidden rounded-3xl shadow-lg md:h-[420px] lg:h-[520px]">
+        <div className="relative h-65 w-full overflow-hidden rounded-3xl shadow-lg md:h-105 lg:h-130">
           <Image
             src="/portrait.jpg"
             alt="Emprende UPC portada"
@@ -117,16 +103,7 @@ export default async function Home() {
       </section>
 
       <main className="mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-16 pt-12 md:gap-20 md:px-10 lg:px-16">
-        <section className="grid gap-6 rounded-2xl border border-border/70 bg-card/50 p-6 shadow-sm md:grid-cols-3">
-          {stats.map((item) => (
-            <div key={item.label} className="space-y-2">
-              <div className="text-3xl font-semibold text-foreground">
-                {item.value}
-              </div>
-              <p className="text-sm text-muted-foreground">{item.label}</p>
-            </div>
-          ))}
-        </section>
+        {/* Sección de estadísticas eliminada */}
 
         <section id="caracteristicas" className="space-y-8">
           <div className="flex items-start justify-between gap-4">

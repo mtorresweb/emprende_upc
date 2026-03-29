@@ -20,6 +20,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 import { createVenture } from "./actions";
+// import { NewVentureForm } from "@/components/panel/new-venture-form";
 
 export default async function PanelPage({
   searchParams,
@@ -76,93 +77,52 @@ export default async function PanelPage({
         </CardContent>
       </Card>
 
-      <div className="grid items-start gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-        <Card className="order-2 w-full min-w-0 border-border/70 bg-card/90 shadow-sm lg:order-1">
-          <CardHeader className="space-y-2 pb-2">
-            <CardTitle className="text-xl">Mis emprendimientos</CardTitle>
-            <CardDescription>Publica y edita tus proyectos.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {ventures.length === 0 && (
-              <p className="text-sm text-muted-foreground">Aún no tienes emprendimientos publicados. Crea el primero.</p>
-            )}
-
-            <div className="pl-1 pr-4 pb-2" style={{ height: "651px", overflowY: "auto" }}>
-              <div className="grid grid-cols-1 gap-4 pr-2 pb-1">
-                {ventures.map((venture) => (
-                  <Link
-                    key={venture.id}
-                    href={`/panel/${venture.id}`}
-                    className="flex h-full flex-col justify-between rounded-2xl border border-border/80 bg-background/70 p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-border hover:shadow-md"
-                  >
-                    <div className="min-w-0 space-y-2">
-                      <div className="flex flex-wrap items-center gap-2 text-sm">
-                        <Badge variant="secondary">{stageLabel[venture.stage]}</Badge>
-                        <span className="text-muted-foreground">
-                          {new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(new Date(venture.createdAt))}
-                        </span>
-                        <span className="text-muted-foreground">{venture.attachments.length} adjuntos</span>
+      <div className="flex flex-col gap-6">
+        <div className="flex w-full justify-end">
+          <Link
+            href="/panel/nuevo"
+            className="w-full sm:w-auto inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
+          >
+            Publicar nuevo
+          </Link>
+        </div>
+        <div className="grid items-start gap-8 lg:grid-cols-1">
+          <Card className="w-full min-w-0 border-border/70 bg-card/90 shadow-sm">
+            <CardHeader className="space-y-2 pb-2">
+              <CardTitle className="text-xl">Mis emprendimientos</CardTitle>
+              <CardDescription>Publica y edita tus proyectos.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {ventures.length === 0 && (
+                <p className="text-sm text-muted-foreground">Aún no tienes emprendimientos publicados. Crea el primero.</p>
+              )}
+              <div className="pl-1 pr-4 pb-2" style={{ height: "651px", overflowY: "auto" }}>
+                <div className="grid grid-cols-1 gap-4 pr-2 pb-1">
+                  {ventures.map((venture) => (
+                    <Link
+                      key={venture.id}
+                      href={`/panel/${venture.id}`}
+                      className="flex h-full flex-col justify-between rounded-2xl border border-border/80 bg-background/70 p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-border hover:shadow-md"
+                    >
+                      <div className="min-w-0 space-y-2">
+                        <div className="flex flex-wrap items-center gap-2 text-sm">
+                          <Badge variant="secondary">{stageLabel[venture.stage]}</Badge>
+                          <span className="text-muted-foreground">
+                            {new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(new Date(venture.createdAt))}
+                          </span>
+                          <span className="text-muted-foreground">{venture.attachments.length} adjuntos</span>
+                        </div>
+                        <p className="truncate text-base font-semibold text-foreground">{venture.title}</p>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">{venture.summary}</p>
                       </div>
-                      <p className="truncate text-base font-semibold text-foreground">{venture.title}</p>
-                      <p className="line-clamp-2 text-sm text-muted-foreground">{venture.summary}</p>
-                    </div>
-                    <div className="mt-4 text-sm font-semibold text-primary">Ver detalles</div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card
-          className="order-1 w-full min-w-0 border-border/70 bg-card/90 shadow-sm md:sticky md:top-6 lg:order-2"
-          id="nuevo"
-        >
-          <CardHeader className="space-y-2 pb-2">
-            <CardTitle className="text-xl">Publicar nuevo</CardTitle>
-            <CardDescription>Completa la ficha básica. Puedes adjuntar un archivo inicial (opcional).</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <form action={createVentureAction} className="space-y-5" data-attachment-form="true">
-              <div className="space-y-2">
-                <Label htmlFor="title">Título</Label>
-                <Input name="title" id="title" required minLength={3} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="summary">Descripción</Label>
-                <Textarea name="summary" id="summary" required minLength={10} className="min-h-40" />
-              </div>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="stage">Etapa</Label>
-                  <select
-                    name="stage"
-                    id="stage"
-                    className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
-                    defaultValue="IDEA"
-                  >
-                    <option value="IDEA">Idea</option>
-                    <option value="PROTOTYPE">Prototipo</option>
-                    <option value="MVP">MVP</option>
-                    <option value="GROWTH">Crecimiento</option>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tags">Etiquetas (coma separadas)</Label>
-                  <Input name="tags" id="tags" placeholder="fintech, impacto, salud" />
+                      <div className="mt-4 text-sm font-semibold text-primary">Ver detalles</div>
+                    </Link>
+                  ))}
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="files">Adjuntos iniciales (opcional)</Label>
-                <Input name="files" id="files" type="file" className="text-sm" multiple />
-                <p className="text-xs text-muted-foreground">Máx 8MB por archivo, total ~30MB.</p>
-              </div>
-              <Button type="submit" className="w-full">
-                Publicar
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

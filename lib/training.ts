@@ -25,23 +25,22 @@ type CategoryDefinition = {
 // Static manifest keeps serverless bundle small (avoids tracing the entire public folder).
 const catalogDefinition: CategoryDefinition[] = [
   {
-    category: "Comercio Electrónico",
+    category: "COMERCIO ELECTRÓNICO",
     dir: "Comercio Electrónico",
     files: [
-      "Actividades-Practicas-Comercio-Electronico.pptx.pdf",
       "Introduccion-al-Comercio-Electronico.pptx.pdf",
       "Unidad-2-Creacion-de-la-Presencia-Online.pptx.pdf",
       "Unidad-3-Estrategias-de-Ventas-Digitales.pptx.pdf",
       "Unidad-4Medios-de-Pago-y-Logistica.pptx.pdf",
       "Unidad-5-Marketing-Digital-para-el-E-commerce.pptx.pdf",
       "Unidad-6-Gestion-y-Crecimiento-del-Negocio-Online.pptx.pdf",
+      "Actividades-Practicas-Comercio-Electronico.pptx.pdf",
     ],
   },
   {
-    category: "Finanzas para Emprendedores",
+    category: "FINANZAS PARA EMPRENDEDORES",
     dir: "Finanzas para Emprendedores",
     files: [
-      "Actividades-finales-de-los-modulo.pptx.pdf",
       "Unidad-1-Introduccion-a-las-Finanzas-para-Emprendedores.pptx.pdf",
       "Unidad-2-Control-de-Ingresos-y-Gastos.pptx.pdf",
       "Unidad-3-Presupuesto-Empresarial.pptx.pdf",
@@ -49,22 +48,23 @@ const catalogDefinition: CategoryDefinition[] = [
       "Unidad-5-Fuentes-de-Financiamiento-para-Emprendedores.pptx.pdf",
       "Unidad-6-Indicadores-Financieros-Basicos.pptx.pdf",
       "unidad-7-Buenas-Practicas-Financieras.pptx.pdf",
+      "Actividades-finales-de-los-modulo.pptx.pdf",
     ],
   },
   {
-    category: "Marketing Digital para Emprendimientos",
+    category: "MARKETING DIGITAL PARA EMPRENDIMIENTOS",
     dir: "Marketing Digital para Emprendimientos",
     files: [
-      "Actividades-Propuestas.pptx.pdf",
       "Introduccion-al-Marketing-Digital.pptx.pdf",
       "UNIDAD-2-IDENTIDAD-Y-PRESENCIA-DIGITAL.pptx.pdf",
       "UNIDAD-3-Estrategias-y-Herramientas-Digitales.pptx.pdf",
       "UNIDAD-4-Creacion-de-Contenido-Digital.pptx.pdf",
       "Unidad-5-Analitica-y-Medicion-de-Resultados-en-Marketing-Digital.pptx.pdf",
+      "Actividades-Propuestas.pptx.pdf",
     ],
   },
   {
-    category: "Modelos de Negocio",
+    category: "MODELOS DE NEGOCIO",
     dir: "Modelos de Negocio",
     files: [
       "Introduccion-a-los-Modelos-de-Negocio.pptx.pdf",
@@ -76,11 +76,7 @@ const catalogDefinition: CategoryDefinition[] = [
     ],
   },
   {
-    category: "General",
-    files: ["Mentalidad_Innovadora_Presentacion_Creativa.pptx"],
-  },
-  {
-    category: "Recursos y oportunidades (Colombia)",
+    category: "RECURSOS Y OPORTUNIDADES (COLOMBIA)",
     dir: "Recursos Colombia",
     files: ["Fuentes-y-eventos-Colombia.html"],
   },

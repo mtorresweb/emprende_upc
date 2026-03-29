@@ -97,7 +97,7 @@ export default async function EmprendimientosPage({
         </div>
         {session?.user?.id ? (
           <Button asChild variant="secondary">
-            <Link href="/panel">Publicar nuevo</Link>
+            <Link href="/panel/nuevo">Publicar nuevo</Link>
           </Button>
         ) : (
           <Button asChild variant="secondary">

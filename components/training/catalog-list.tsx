@@ -137,7 +137,7 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
                           <Check className="h-3 w-3" />
                         </span>
                       )}
-                      <span>{res.label}</span>
+                      <span>{res.label.replace(/\.[^/.]+$/, "")}</span>
                     </span>
                     <span className="text-xs text-muted-foreground">{isMobile ? "Descargar" : "Abrir"}</span>
                   </button>
