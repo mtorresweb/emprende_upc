@@ -11,6 +11,7 @@ export type TrainingCategory = {
 function prettifyName(fileName: string) {
   const withoutExt = fileName.replace(/\.[^/.]+$/, "");
   return withoutExt
+    .replace(/_\d{8}_\d{6}_\d{4}$/, "") // strip Canva-style timestamps
     .replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -26,15 +27,15 @@ type CategoryDefinition = {
 const catalogDefinition: CategoryDefinition[] = [
   {
     category: "COMERCIO ELECTRÓNICO",
-    dir: "Comercio Electrónico",
+    dir: "comercio electrónico",
     files: [
-      "Introduccion-al-Comercio-Electronico.pptx.pdf",
-      "Unidad-2-Creacion-de-la-Presencia-Online.pptx.pdf",
-      "Unidad-3-Estrategias-de-Ventas-Digitales.pptx.pdf",
-      "Unidad-4Medios-de-Pago-y-Logistica.pptx.pdf",
-      "Unidad-5-Marketing-Digital-para-el-E-commerce.pptx.pdf",
-      "Unidad-6-Gestion-y-Crecimiento-del-Negocio-Online.pptx.pdf",
-      "Actividades-Practicas-Comercio-Electronico.pptx.pdf",
+      "Unidad 1 Introduccion al Comercio Electronico_20260331_104024_0000.pdf",
+      "Unidad 2 Creacion de la Presencia Online._20260331_104536_0000.pdf",
+      "Unidad 3 Estrategias de Ventas Digitales._20260331_104917_0000.pdf",
+      "Unidad 4 Medios de Pago y Logistica._20260331_105159_0000.pdf",
+      "Unidad 5 Marketing Digital para el E-commerce_20260331_105550_0000.pdf",
+      "Unidad 6 Gestion y Crecimiento del Negocio Online._20260331_110404_0000.pdf",
+      "Actividades Practicas Comercio Electronico._20260331_110205_0000.pdf",
     ],
   },
   {
