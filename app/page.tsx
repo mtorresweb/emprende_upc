@@ -108,7 +108,7 @@ export default async function Home() {
         <section id="caracteristicas" className="space-y-8">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold">Todo en un solo lugar</h2>
+              <h2 className="text-2xl font-semibold uppercase">Todo en un solo lugar</h2>
               <p className="text-muted-foreground">
                 Registra tu perfil, publica tu emprendimiento y accede a recursos de
                 formación con asistencia inmediata.
@@ -136,7 +136,7 @@ export default async function Home() {
 
         <section className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold">Cómo funciona</h2>
+            <h2 className="text-2xl font-semibold uppercase">Cómo funciona</h2>
             <p className="text-muted-foreground">
               Tres pasos para salir a producción en el programa institucional.
             </p>
@@ -160,7 +160,7 @@ export default async function Home() {
 
         <section className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold">Emprendimientos destacados</h2>
+            <h2 className="text-2xl font-semibold uppercase">Emprendimientos destacados</h2>
             <p className="text-muted-foreground">
               Casos reales publicados por la comunidad. Explora más con filtros y vistas.
             </p>
@@ -209,7 +209,7 @@ export default async function Home() {
 
         <section id="formacion" className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold">Módulos de formación</h2>
+            <h2 className="text-2xl font-semibold uppercase">Módulos de formación</h2>
             <p className="text-muted-foreground">
               Recursos de formación que podrás abrir en una pestaña nueva para
               revisarlos con calma.

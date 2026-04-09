@@ -5,6 +5,7 @@ export type TrainingResource = {
 
 export type TrainingCategory = {
   category: string;
+  description?: string;
   resources: TrainingResource[];
 };
 
@@ -19,6 +20,7 @@ function prettifyName(fileName: string) {
 
 type CategoryDefinition = {
   category: string;
+  description?: string;
   dir?: string; // directory inside "modulos de formacion"
   files: string[]; // file names inside the directory (or root if dir is empty)
 };
@@ -27,6 +29,7 @@ type CategoryDefinition = {
 const catalogDefinition: CategoryDefinition[] = [
   {
     category: "COMERCIO ELECTRÓNICO",
+    description: "Aprende a crear, gestionar y optimizar tiendas en línea para vender productos o servicios a través de internet. Este módulo aborda conceptos clave como plataformas e-commerce, métodos de pago digitales, logística de envíos y estrategias para aumentar las ventas en entornos digitales.",
     dir: "comercio electrónico",
     files: [
       "Unidad 1 Introduccion al Comercio Electronico_20260331_104024_0000.pdf",
@@ -40,6 +43,7 @@ const catalogDefinition: CategoryDefinition[] = [
   },
   {
     category: "FINANZAS PARA EMPRENDEDORES",
+    description: "Desarrolla habilidades para gestionar adecuadamente los recursos financieros de tu emprendimiento. Incluye temas como costos, presupuestos, flujo de caja, fijación de precios y toma de decisiones financieras que permitan la sostenibilidad del negocio.",
     dir: "Finanzas para Emprendedores",
     files: [
       "Unidad-1-Introduccion-a-las-Finanzas-para-Emprendedores.pptx.pdf",
@@ -54,6 +58,7 @@ const catalogDefinition: CategoryDefinition[] = [
   },
   {
     category: "MARKETING DIGITAL PARA EMPRENDIMIENTOS",
+    description: "Conoce estrategias para promocionar tu negocio en medios digitales. Este módulo enseña el uso de redes sociales, publicidad online, branding, creación de contenido y herramientas digitales para atraer clientes y posicionar tu emprendimiento en el mercado.",
     dir: "Marketing Digital para Emprendimientos",
     files: [
       "Introduccion-al-Marketing-Digital.pptx.pdf",
@@ -66,6 +71,7 @@ const catalogDefinition: CategoryDefinition[] = [
   },
   {
     category: "MODELOS DE NEGOCIO",
+    description: "Aprende a estructurar y definir tu idea de emprendimiento mediante herramientas como el modelo Canvas. Este módulo te ayudará a identificar tu propuesta de valor, clientes, canales, fuentes de ingresos y recursos clave para convertir tu idea en un negocio viable.",
     dir: "Modelos de Negocio",
     files: [
       "Introduccion-a-los-Modelos-de-Negocio.pptx.pdf",
@@ -84,13 +90,13 @@ const catalogDefinition: CategoryDefinition[] = [
 ];
 
 function buildCatalog(): TrainingCategory[] {
-  return catalogDefinition.map(({ category, dir, files }) => {
+  return catalogDefinition.map(({ category, description, dir, files }) => {
     const prefix = dir ? `modulos de formacion/${dir}/` : "modulos de formacion/";
     const resources: TrainingResource[] = files.map((file) => ({
       label: prettifyName(file),
       path: `${prefix}${file}`,
     }));
-    return { category, resources };
+    return { category, description, resources };
   });
 }
 

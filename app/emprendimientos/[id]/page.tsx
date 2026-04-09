@@ -36,6 +36,7 @@ export default async function VenturePublicPage({
       coverKey: true,
       owner: {
         select: {
+          id: true,
           name: true,
           profile: { select: { fullName: true, avatarKey: true } },
         },
@@ -54,6 +55,7 @@ export default async function VenturePublicPage({
   if (!venture) notFound();
 
   const ownerName = venture.owner?.profile?.fullName || venture.owner?.name || "Emprendedor";
+  const ownerId = venture.owner?.id;
   const avatarUrl = venture.owner?.profile?.avatarKey || null;
   const coverUrl = venture.coverKey || null;
   const initials = venture.title.slice(0, 2).toUpperCase();
@@ -88,7 +90,7 @@ export default async function VenturePublicPage({
             <span>
               Publicado: {new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(new Date(venture.createdAt))}
             </span>
-            <span>Responsable: {ownerName}</span>
+            <span>Responsable: <Link href={`/usuarios/${ownerId}`} className="underline-offset-2 hover:underline hover:text-foreground transition-colors">{ownerName}</Link></span>
             {venture.tags.length > 0 && (
               <span className="flex flex-wrap items-center gap-2">
                 <span className="text-xs uppercase tracking-wide">Tags:</span>

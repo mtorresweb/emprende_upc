@@ -74,7 +74,7 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
                   {cat.category}
                   <Badge variant="outline">{cat.resources.length} recursos</Badge>
                 </CardTitle>
-                <CardDescription>Los módulos se abren en pestaña nueva; algunos se muestran dentro de la página.</CardDescription>
+                {cat.description && <CardDescription>{cat.description}</CardDescription>}
                 {(() => {
                   const completed = cat.resources.filter((r) => seen.has(r.path)).length;
                   const percent = Math.round((completed / (cat.resources.length || 1)) * 100);
