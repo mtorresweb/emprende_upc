@@ -78,6 +78,10 @@ model Venture {
   summary     String         @db.Text
   stage       VentureStage   @default(IDEA)
   tags        String[]
+  instagram   String?
+  facebook    String?
+  contactNumber String?
+  logoKey     String?
   coverKey    String?
   featured    Boolean        @default(false)
   published   Boolean        @default(true)

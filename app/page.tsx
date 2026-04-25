@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
+  Facebook,
+  Instagram,
   Lightbulb,
   MessageCircle,
+  Phone,
   Rocket,
   ShieldCheck,
   Sparkles,
@@ -81,7 +84,18 @@ export default async function Home() {
     where: { published: true },
     orderBy: { createdAt: "desc" },
     take: 6,
-    select: { id: true, title: true, summary: true, stage: true, tags: true },
+    select: {
+      id: true,
+      title: true,
+      summary: true,
+      stage: true,
+      tags: true,
+      coverKey: true,
+      logoKey: true,
+      instagram: true,
+      facebook: true,
+      contactNumber: true,
+    },
   });
 
   const hasFeatured = featured.length > 0;
@@ -169,8 +183,34 @@ export default async function Home() {
             <>
               <div className="grid gap-4 md:grid-cols-3">
                 {ventures.map((venture) => (
-                  <Card key={venture.id} className="h-full">
-                    <CardHeader className="space-y-2">
+                  <Card key={venture.id} className="h-full overflow-hidden">
+                    <div className="relative h-24 w-full overflow-hidden border-b border-border/60 bg-muted/50 md:h-28">
+                      {venture.coverKey ? (
+                        <img
+                          src={venture.coverKey}
+                          alt={`Portada de ${venture.title}`}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-linear-to-r from-primary/15 via-primary/5 to-secondary/15" />
+                      )}
+
+                      <div className="absolute bottom-2 left-3">
+                        {venture.logoKey ? (
+                          <img
+                            src={venture.logoKey}
+                            alt={`Logo de ${venture.title}`}
+                            className="h-10 w-10 rounded-md border border-border/70 bg-background object-contain shadow-sm"
+                          />
+                        ) : (
+                          <div className="flex h-10 w-10 items-center justify-center rounded-md border border-border/70 bg-background text-[10px] font-semibold text-muted-foreground shadow-sm">
+                            {venture.title.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <CardHeader className="space-y-2 pt-5">
                       <div className="flex items-center justify-between">
                         <Link href={`/emprendimientos/${venture.id}`} className="text-base font-semibold hover:underline">
                           {venture.title}
@@ -182,9 +222,29 @@ export default async function Home() {
                     <CardContent className="flex flex-wrap gap-2">
                       {venture.tags.map((tag) => (
                         <Badge key={tag} variant="outline">
-                          {tag}
+                          #{tag}
                         </Badge>
                       ))}
+                      {venture.contactNumber && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5 text-xs text-muted-foreground">
+                          <Phone className="h-3.5 w-3.5" /> Contacto
+                        </span>
+                      )}
+                      {venture.instagram && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5 text-xs text-muted-foreground">
+                          <Instagram className="h-3.5 w-3.5" /> Instagram
+                        </span>
+                      )}
+                      {venture.facebook && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5 text-xs text-muted-foreground">
+                          <Facebook className="h-3.5 w-3.5" /> Facebook
+                        </span>
+                      )}
+                      {venture.contactNumber && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5 text-xs text-muted-foreground">
+                          <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                        </span>
+                      )}
                     </CardContent>
                   </Card>
                 ))}

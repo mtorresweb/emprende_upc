@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import Fuse from "fuse.js";
+import { Facebook, Instagram, MessageCircle, Phone } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,19 @@ export default async function EmprendimientosPage({
       ...(stageFilter ? { stage: stageFilter } : {}),
     },
     orderBy: { createdAt: "desc" },
-    select: { id: true, title: true, summary: true, stage: true, tags: true, createdAt: true },
+    select: {
+      id: true,
+      title: true,
+      summary: true,
+      stage: true,
+      tags: true,
+      coverKey: true,
+      logoKey: true,
+      instagram: true,
+      facebook: true,
+      contactNumber: true,
+      createdAt: true,
+    },
     take: q ? 200 : MAX_RESULTS,
   });
 
@@ -62,8 +75,33 @@ export default async function EmprendimientosPage({
     : venturesBase;
 
   const renderCard = (v: typeof ventures[number]) => (
-    <Card key={v.id} className="h-full">
-      <CardHeader className="space-y-2">
+    <Card key={v.id} className="h-full overflow-hidden">
+      <div className="relative h-24 w-full overflow-hidden border-b border-border/60 bg-muted/50 md:h-28">
+        {v.coverKey ? (
+          <img
+            src={v.coverKey}
+            alt={`Portada de ${v.title}`}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="h-full w-full bg-linear-to-r from-primary/15 via-primary/5 to-secondary/15" />
+        )}
+        <div className="absolute bottom-2 left-3">
+          {v.logoKey ? (
+            <img
+              src={v.logoKey}
+              alt={`Logo de ${v.title}`}
+              className="h-12 w-12 rounded-lg border border-border/70 bg-background object-contain shadow-sm"
+            />
+          ) : (
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border/70 bg-background text-xs font-semibold text-muted-foreground shadow-sm">
+              {v.title.slice(0, 2).toUpperCase()}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <CardHeader className="space-y-2 pt-5">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base">
               <Link href={`/emprendimientos/${v.id}`} className="hover:underline">
@@ -77,9 +115,29 @@ export default async function EmprendimientosPage({
       <CardContent className="flex flex-wrap gap-2 text-xs text-muted-foreground">
         {v.tags.map((tag) => (
           <Badge key={tag} variant="outline">
-            {tag}
+            #{tag}
           </Badge>
         ))}
+        {v.contactNumber && (
+          <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+            <Phone className="h-3.5 w-3.5" /> Contacto
+          </span>
+        )}
+        {v.instagram && (
+          <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+            <Instagram className="h-3.5 w-3.5" /> Instagram
+          </span>
+        )}
+        {v.facebook && (
+          <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+            <Facebook className="h-3.5 w-3.5" /> Facebook
+          </span>
+        )}
+        {v.contactNumber && (
+          <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+            <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+          </span>
+        )}
         <span className="ml-auto text-[11px]">
           {new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(new Date(v.createdAt))}
         </span>
@@ -164,6 +222,27 @@ export default async function EmprendimientosPage({
             <div key={v.id} className="rounded-2xl border border-border/70 bg-background/80 p-4 shadow-sm">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="space-y-2">
+                  <div className="relative h-24 w-full overflow-hidden rounded-xl border border-border/60 bg-muted/50 md:h-28">
+                    {v.coverKey ? (
+                      <img src={v.coverKey} alt={`Portada de ${v.title}`} className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="h-full w-full bg-linear-to-r from-primary/15 via-primary/5 to-secondary/15" />
+                    )}
+                    <div className="absolute bottom-2 left-3">
+                      {v.logoKey ? (
+                        <img
+                          src={v.logoKey}
+                          alt={`Logo de ${v.title}`}
+                          className="h-10 w-10 rounded-md border border-border/70 bg-background object-contain shadow-sm"
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 items-center justify-center rounded-md border border-border/70 bg-background text-[10px] font-semibold text-muted-foreground shadow-sm">
+                          {v.title.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="flex items-center gap-3">
                     <Badge variant="secondary">{stageLabel[v.stage] || v.stage}</Badge>
                     <p className="text-xs text-muted-foreground">
@@ -177,9 +256,29 @@ export default async function EmprendimientosPage({
                   <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                     {v.tags.map((tag) => (
                       <Badge key={tag} variant="outline">
-                        {tag}
+                        #{tag}
                       </Badge>
                     ))}
+                    {v.contactNumber && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+                        <Phone className="h-3.5 w-3.5" /> Contacto
+                      </span>
+                    )}
+                    {v.instagram && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+                        <Instagram className="h-3.5 w-3.5" /> Instagram
+                      </span>
+                    )}
+                    {v.facebook && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+                        <Facebook className="h-3.5 w-3.5" /> Facebook
+                      </span>
+                    )}
+                    {v.contactNumber && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-0.5">
+                        <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                      </span>
+                    )}
                   </div>
                 </div>
                 <Link

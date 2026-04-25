@@ -38,7 +38,7 @@ export default async function NuevoEmprendimientoPage() {
         <div className="shrink-0"><QuizEtapaDialog /></div>
       </div>
 
-      <form action={createVentureAction} className="space-y-8" data-attachment-form="true">
+      <form action={createVentureAction} className="space-y-8">
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="border-border/70 bg-card/90 shadow-sm">
             <CardHeader className="space-y-2 pb-2">
@@ -79,6 +79,23 @@ export default async function NuevoEmprendimientoPage() {
                   <Label htmlFor="tags">Etiquetas (usa hashtags)</Label>
                   <Input id="tags" name="tags" placeholder="#fintech #impacto #salud" />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="contactNumber">Número de contacto</Label>
+                  <Input id="contactNumber" name="contactNumber" placeholder="3001234567" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="instagram">Instagram</Label>
+                  <Input id="instagram" name="instagram" placeholder="@miemprendimiento o https://instagram.com/miemprendimiento" />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="facebook">Facebook</Label>
+                  <Input id="facebook" name="facebook" placeholder="https://facebook.com/miemprendimiento" />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="logo">Logo (opcional)</Label>
+                  <Input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp" className="text-sm" />
+                  <p className="text-xs text-muted-foreground">Formatos: PNG, JPG o WEBP. Máx 8MB.</p>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -86,11 +103,12 @@ export default async function NuevoEmprendimientoPage() {
           <Card className="border-border/70 bg-card/90 shadow-sm">
             <CardHeader className="space-y-2 pb-2">
               <CardTitle className="text-xl">Adjuntos</CardTitle>
-              <CardDescription>Sube archivos iniciales para el proyecto (opcional).</CardDescription>
+              <CardDescription>
+                Para evitar errores por carga pesada, primero publica el emprendimiento y luego sube adjuntos uno por uno en la página de detalle.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
-              <Input name="files" type="file" className="text-sm" multiple />
-              <p className="text-xs text-muted-foreground">Máx 8MB por archivo. Total sugerido ~30MB.</p>
+              <p className="text-xs text-muted-foreground">Podrás subir cada archivo en el detalle del emprendimiento (máx 8MB por archivo).</p>
             </CardContent>
           </Card>
         </div>

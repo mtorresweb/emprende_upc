@@ -70,7 +70,7 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
             {catalog.map((cat) => (
               <Card key={cat.category} className="border-border/80 bg-card/90 shadow-sm">
               <CardHeader>
-                <CardTitle className="flex items-center justify-between text-lg">
+                <CardTitle className="flex items-center justify-between text-lg uppercase">
                   {cat.category}
                   <Badge variant="outline">{cat.resources.length} recursos</Badge>
                 </CardTitle>
@@ -137,7 +137,13 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
                           <Check className="h-3 w-3" />
                         </span>
                       )}
-                      <span className={/^\s*unidad\b/i.test(res.label) ? "font-semibold" : undefined}>
+                      <span
+                        className={
+                          /^\s*(unidad|actividades?)\b/i.test(res.label)
+                            ? "font-semibold uppercase"
+                            : "uppercase"
+                        }
+                      >
                         {res.label.replace(/\.[^/.]+$/, "")}
                       </span>
                     </span>

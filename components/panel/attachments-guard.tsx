@@ -66,7 +66,7 @@ export function AttachmentsGuard() {
     const uploadHandler = (ev: Event) => {
       const form = ev.target as HTMLFormElement;
       const inputs = Array.from(
-        form.querySelectorAll<HTMLInputElement>('input[type="file"][name="files"]')
+        form.querySelectorAll<HTMLInputElement>('input[type="file"]')
       );
       const files = inputs.flatMap((inp) => Array.from(inp.files || []));
       const total = files.reduce((sum, f) => sum + (f?.size || 0), 0);

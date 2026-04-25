@@ -36,6 +36,11 @@ export const revalidate = 0;
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
+function toWhatsAppUrl(contactNumber: string) {
+  const digits = contactNumber.replace(/\D/g, "");
+  return digits ? `https://wa.me/${digits}` : "";
+}
+
 export default async function VentureDetailPage({
   params,
   searchParams,
@@ -57,6 +62,10 @@ export default async function VentureDetailPage({
       summary: true,
       stage: true,
       tags: true,
+      instagram: true,
+      facebook: true,
+      contactNumber: true,
+      logoKey: true,
       coverKey: true,
       createdAt: true,
       attachments: {
@@ -84,6 +93,7 @@ export default async function VentureDetailPage({
   const renameAttachmentAction = renameAttachment.bind(null, session.user.id);
 
   const redirectTo = `/panel/${venture.id}`;
+  const whatsappUrl = venture.contactNumber ? toWhatsAppUrl(venture.contactNumber) : null;
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-8 pb-12">
@@ -100,6 +110,12 @@ export default async function VentureDetailPage({
               {new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(new Date(venture.createdAt))}
             </span>
             <span>{venture.attachments.length} adjuntos</span>
+            {venture.contactNumber ? <span>Contacto: {venture.contactNumber}</span> : null}
+            {whatsappUrl ? (
+              <a href={whatsappUrl} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+                WhatsApp
+              </a>
+            ) : null}
             {venture.tags.length > 0 && (
               <span className="flex flex-wrap items-center gap-2">
                 <span className="text-xs uppercase tracking-wide">Tags:</span>
@@ -163,6 +179,18 @@ export default async function VentureDetailPage({
                 <div className="space-y-2">
                   <Label htmlFor="tags">Etiquetas (usa hashtags)</Label>
                   <Input id="tags" name="tags" defaultValue={venture.tags.map((tag) => `#${tag}`).join(" ")} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="contactNumber">Número de contacto</Label>
+                  <Input id="contactNumber" name="contactNumber" defaultValue={venture.contactNumber ?? ""} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="instagram">Instagram</Label>
+                  <Input id="instagram" name="instagram" defaultValue={venture.instagram ?? ""} />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="facebook">Facebook</Label>
+                  <Input id="facebook" name="facebook" defaultValue={venture.facebook ?? ""} />
                 </div>
               </div>
             </form>
@@ -250,11 +278,11 @@ export default async function VentureDetailPage({
             >
               <input type="hidden" name="ventureId" value={venture.id} />
               <input type="hidden" name="redirectTo" value={redirectTo} />
-              <Input name="files" type="file" className="text-sm" multiple />
+              <Input name="file" type="file" className="text-sm" />
               <Button type="submit" size="sm" className="w-full">
-                Subir archivos
+                Subir archivo
               </Button>
-              <p className="text-xs text-muted-foreground">Máx 8MB por archivo. Total sugerido ~30MB.</p>
+              <p className="text-xs text-muted-foreground">Sube un archivo por vez. Máx 8MB por archivo.</p>
             </form>
           </CardContent>
         </Card>

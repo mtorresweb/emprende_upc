@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
+import { Facebook, Instagram, MessageCircle, Phone } from "lucide-react";
 
 import { AttachmentsGuard } from "@/components/panel/attachments-guard";
 import { PanelToastTrigger } from "@/components/panel/panel-toast-trigger";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,14 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-
-import { createVenture } from "./actions";
-// import { NewVentureForm } from "@/components/panel/new-venture-form";
 
 export default async function PanelPage({
   searchParams,
@@ -41,6 +35,11 @@ export default async function PanelPage({
       summary: true,
       stage: true,
       tags: true,
+      coverKey: true,
+      logoKey: true,
+      instagram: true,
+      facebook: true,
+      contactNumber: true,
       createdAt: true,
       attachments: {
         select: { id: true, name: true, url: true, mimeType: true, size: true },
@@ -55,8 +54,6 @@ export default async function PanelPage({
     MVP: "MVP",
     GROWTH: "Crecimiento",
   };
-
-  const createVentureAction = createVenture.bind(null, session.user.id);
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 pb-10">
@@ -102,9 +99,35 @@ export default async function PanelPage({
                     <Link
                       key={venture.id}
                       href={`/panel/${venture.id}`}
-                      className="flex h-full flex-col justify-between rounded-2xl border border-border/80 bg-background/70 p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-border hover:shadow-md"
+                      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-background/70 shadow-sm transition hover:-translate-y-0.5 hover:border-border hover:shadow-md"
                     >
-                      <div className="min-w-0 space-y-2">
+                      <div className="relative h-24 w-full overflow-hidden border-b border-border/60 bg-muted/50 md:h-28">
+                        {venture.coverKey ? (
+                          <img
+                            src={venture.coverKey}
+                            alt={`Portada de ${venture.title}`}
+                            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                          />
+                        ) : (
+                          <div className="h-full w-full bg-linear-to-r from-primary/15 via-primary/5 to-secondary/15" />
+                        )}
+
+                        <div className="absolute bottom-2 left-3">
+                          {venture.logoKey ? (
+                            <img
+                              src={venture.logoKey}
+                              alt={`Logo de ${venture.title}`}
+                              className="h-12 w-12 rounded-lg border border-border/70 bg-background object-contain shadow-sm"
+                            />
+                          ) : (
+                            <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border/70 bg-background text-xs font-semibold text-muted-foreground shadow-sm">
+                              {venture.title.slice(0, 2).toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="min-w-0 space-y-2 p-5">
                         <div className="flex flex-wrap items-center gap-2 text-sm">
                           <Badge variant="secondary">{stageLabel[venture.stage]}</Badge>
                           <span className="text-muted-foreground">
@@ -112,10 +135,39 @@ export default async function PanelPage({
                           </span>
                           <span className="text-muted-foreground">{venture.attachments.length} adjuntos</span>
                         </div>
+
                         <p className="truncate text-base font-semibold text-foreground">{venture.title}</p>
                         <p className="line-clamp-2 text-sm text-muted-foreground">{venture.summary}</p>
+
+                        <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-muted-foreground">
+                          {venture.contactNumber ? (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-1">
+                              <Phone className="h-3.5 w-3.5" />
+                              Contacto
+                            </span>
+                          ) : null}
+                          {venture.instagram ? (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-1">
+                              <Instagram className="h-3.5 w-3.5" />
+                              Instagram
+                            </span>
+                          ) : null}
+                          {venture.facebook ? (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-1">
+                              <Facebook className="h-3.5 w-3.5" />
+                              Facebook
+                            </span>
+                          ) : null}
+                          {venture.contactNumber ? (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-2 py-1">
+                              <MessageCircle className="h-3.5 w-3.5" />
+                              WhatsApp
+                            </span>
+                          ) : null}
+                        </div>
                       </div>
-                      <div className="mt-4 text-sm font-semibold text-primary">Ver detalles</div>
+
+                      <div className="px-5 pb-5 text-sm font-semibold text-primary">Ver detalles</div>
                     </Link>
                   ))}
                 </div>
