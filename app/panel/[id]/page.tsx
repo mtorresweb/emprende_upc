@@ -25,7 +25,9 @@ import {
   addAttachment,
   deleteAttachment,
   deleteVenture,
+  removeVentureLogo,
   updateVentureCover,
+  updateVentureLogo,
   removeVentureCover,
   renameAttachment,
   updateVenture,
@@ -89,6 +91,8 @@ export default async function VentureDetailPage({
   const addAttachmentAction = addAttachment.bind(null, session.user.id);
   const updateCoverAction = updateVentureCover.bind(null, session.user.id);
   const removeCoverAction = removeVentureCover.bind(null, session.user.id);
+  const updateLogoAction = updateVentureLogo.bind(null, session.user.id);
+  const removeLogoAction = removeVentureLogo.bind(null, session.user.id);
   const deleteAttachmentAction = deleteAttachment.bind(null, session.user.id);
   const renameAttachmentAction = renameAttachment.bind(null, session.user.id);
 
@@ -311,6 +315,56 @@ export default async function VentureDetailPage({
               <input type="hidden" name="ventureId" value={venture.id} />
               <input type="hidden" name="redirectTo" value={`/panel/${venture.id}`} />
               <Button type="submit" className="sm:w-40">Actualizar portada</Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card className="border-border/70 bg-card/90 shadow-sm">
+        <CardHeader className="space-y-2 pb-2">
+          <CardTitle className="text-xl">Logo</CardTitle>
+          <CardDescription>Sube o actualiza el logo del proyecto (PNG, JPG o WEBP).</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {venture.logoKey ? (
+              <div className="flex items-center gap-3">
+                <img
+                  src={venture.logoKey}
+                  alt={`Logo de ${venture.title}`}
+                  className="h-16 w-16 rounded-lg border border-border/70 bg-background object-contain"
+                />
+                <p className="text-xs text-muted-foreground">Logo actual cargado.</p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No hay logo cargado.</p>
+            )}
+            {venture.logoKey && (
+              <form action={removeLogoAction} className="sm:ml-2">
+                <input type="hidden" name="ventureId" value={venture.id} />
+                <input type="hidden" name="redirectTo" value={`/panel/${venture.id}`} />
+                <Button type="submit" variant="ghost" size="sm">Quitar logo</Button>
+              </form>
+            )}
+          </div>
+
+          <form action={updateLogoAction} className="space-y-3">
+            <div className="space-y-2">
+              <Label htmlFor="logo">Imagen de logo</Label>
+              <Input
+                id="logo"
+                name="logo"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                required
+                className="text-sm"
+              />
+              <p className="text-xs text-muted-foreground">Máx 8MB.</p>
+            </div>
+            <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:gap-2">
+              <input type="hidden" name="ventureId" value={venture.id} />
+              <input type="hidden" name="redirectTo" value={`/panel/${venture.id}`} />
+              <Button type="submit" className="sm:w-40">Actualizar logo</Button>
             </div>
           </form>
         </CardContent>

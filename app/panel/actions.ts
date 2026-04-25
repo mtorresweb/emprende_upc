@@ -250,6 +250,76 @@ export async function removeVentureCover(userId: string, formData: FormData) {
   redirect(`${redirectTo}?ok=1`);
 }
 
+export async function updateVentureLogo(userId: string, formData: FormData) {
+  const parsed = coverSchema.safeParse({ ventureId: formData.get("ventureId") });
+  if (!parsed.success) redirect("/panel?error=ID%20faltante");
+
+  const file = formData.get("logo") as File | null;
+  if (!file || !file.size) redirect("/panel?error=Sube%20una%20imagen%20de%20logo.");
+  if (file.type && !IMAGE_TYPES.includes(file.type)) redirect("/panel?error=Formato%20de%20logo%20no%20permitido.");
+  if (file.size > MAX_FILE_SIZE) redirect("/panel?error=Logo%20supera%208MB.");
+
+  const venture = await prisma.venture.findFirst({
+    where: { id: parsed.data.ventureId, ownerId: userId },
+    select: { id: true, logoKey: true },
+  });
+  if (!venture) redirect("/panel?error=No%20autorizado.");
+
+  if (!process.env.BLOB_READ_WRITE_TOKEN) redirect("/panel?error=Falta%20BLOB_READ_WRITE_TOKEN");
+
+  try {
+    if (venture.logoKey) await del(venture.logoKey, { token: process.env.BLOB_READ_WRITE_TOKEN });
+
+    const ext = file.name.split(".").pop() || "png";
+    const blob = await put(`logos/${venture.id}-${Date.now()}.${ext}`, file, {
+      access: "public",
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+      contentType: file.type || undefined,
+    });
+
+    await prisma.venture.update({
+      where: { id: venture.id },
+      data: { logoKey: blob.url },
+    });
+  } catch (err) {
+    console.error("logo upload error", err);
+    redirect("/panel?error=No%20se%20pudo%20subir%20el%20logo.");
+  }
+
+  const redirectTo = getRedirectTo(formData, `/panel/${parsed.data.ventureId}`);
+  revalidatePath("/panel");
+  revalidatePath(redirectTo);
+  revalidatePath(`/emprendimientos/${parsed.data.ventureId}`);
+  redirect(`${redirectTo}?ok=1`);
+}
+
+export async function removeVentureLogo(userId: string, formData: FormData) {
+  const parsed = coverSchema.safeParse({ ventureId: formData.get("ventureId") });
+  if (!parsed.success) redirect("/panel?error=ID%20faltante");
+
+  const venture = await prisma.venture.findFirst({
+    where: { id: parsed.data.ventureId, ownerId: userId },
+    select: { id: true, logoKey: true },
+  });
+  if (!venture) redirect("/panel?error=No%20autorizado.");
+
+  if (venture.logoKey && process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      await del(venture.logoKey, { token: process.env.BLOB_READ_WRITE_TOKEN });
+    } catch (err) {
+      console.error("logo delete error", err);
+    }
+  }
+
+  await prisma.venture.update({ where: { id: venture.id }, data: { logoKey: null } });
+
+  const redirectTo = getRedirectTo(formData, `/panel/${parsed.data.ventureId}`);
+  revalidatePath("/panel");
+  revalidatePath(redirectTo);
+  revalidatePath(`/emprendimientos/${parsed.data.ventureId}`);
+  redirect(`${redirectTo}?ok=1`);
+}
+
 export async function deleteVenture(userId: string, formData: FormData) {
   const ventureId = formData.get("ventureId")?.toString();
   if (!ventureId) redirect("/panel?error=ID%20faltante");

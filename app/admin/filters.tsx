@@ -189,3 +189,94 @@ export function ModuleFilters({
     </form>
   );
 }
+
+const activityTypes = ["all", "users", "ventures", "attachments", "chat", "training"] as const;
+type ActivityType = (typeof activityTypes)[number];
+
+export function ActivityRecentControls({
+  activityType,
+}: {
+  activityType: ActivityType;
+}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
+  const navigateWith = (update: (next: URLSearchParams) => void) => {
+    const next = new URLSearchParams(searchParams.toString());
+    update(next);
+    startTransition(() => {
+      router.replace(next.toString() ? `/admin?${next.toString()}` : "/admin", { scroll: false });
+    });
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2 pt-1">
+      {[
+        { key: "all", label: "Todo" },
+        { key: "users", label: "Usuarios" },
+        { key: "ventures", label: "Emprendimientos" },
+        { key: "attachments", label: "Adjuntos" },
+        { key: "chat", label: "Chat" },
+        { key: "training", label: "Formación" },
+      ].map((item) => {
+        const key = item.key as ActivityType;
+        const active = activityType === key;
+
+        return (
+          <button
+            key={key}
+            type="button"
+            disabled={isPending}
+            onClick={() =>
+              navigateWith((next) => {
+                next.set("tab", "stats");
+                next.set("activityType", key);
+                next.set("activityLimit", "12");
+              })
+            }
+            className={`rounded-md border px-3 py-1.5 text-sm ${active ? "border-primary bg-primary/10 text-primary" : "border-border/70 text-foreground hover:bg-muted/50"}`}
+          >
+            {item.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export function ActivityLoadMoreButton({
+  activityType,
+  activityLimit,
+  canLoadMore,
+}: {
+  activityType: ActivityType;
+  activityLimit: number;
+  canLoadMore: boolean;
+}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
+  if (!canLoadMore) return null;
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      disabled={isPending}
+      onClick={() => {
+        const next = new URLSearchParams(searchParams.toString());
+        next.set("tab", "stats");
+        next.set("activityType", activityType);
+        next.set("activityLimit", String(activityLimit + 12));
+        startTransition(() => {
+          router.replace(next.toString() ? `/admin?${next.toString()}` : "/admin", { scroll: false });
+        });
+      }}
+    >
+      {isPending ? "Cargando..." : "Cargar más"}
+    </Button>
+  );
+}
