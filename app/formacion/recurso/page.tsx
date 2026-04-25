@@ -55,7 +55,7 @@ export default async function TrainingResourceViewer({
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">Recursos y oportunidades (Colombia)</h1>
+        <h1 className="text-2xl font-semibold uppercase">Recursos y oportunidades (Colombia)</h1>
         <p className="text-sm text-muted-foreground">
           El recurso se muestra en esta página para que puedas regresar fácilmente al catálogo.
         </p>
@@ -65,7 +65,7 @@ export default async function TrainingResourceViewer({
         <iframe
           title="Recurso de formación"
           src={resourceUrl}
-          className="h-[78vh] w-full"
+          className="h-[90vh] w-full"
           allowFullScreen
         />
       </div>

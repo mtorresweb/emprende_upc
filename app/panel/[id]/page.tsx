@@ -161,8 +161,8 @@ export default async function VentureDetailPage({
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="tags">Etiquetas (coma separadas)</Label>
-                  <Input id="tags" name="tags" defaultValue={venture.tags.join(", ")} />
+                  <Label htmlFor="tags">Etiquetas (usa hashtags)</Label>
+                  <Input id="tags" name="tags" defaultValue={venture.tags.map((tag) => `#${tag}`).join(" ")} />
                 </div>
               </div>
             </form>

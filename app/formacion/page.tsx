@@ -27,7 +27,7 @@ export default async function TrainingPage() {
           Formación
         </Badge>
         <div className="space-y-2">
-          <h1 className="text-3xl font-semibold leading-tight">Módulos de formación</h1>
+          <h1 className="text-3xl font-semibold leading-tight uppercase">MÓDULOS DE FORMACIÓN</h1>
           <p className="text-muted-foreground">
             Consulta y descarga los recursos en PDF/PPTX. Los enlaces se abrirán en una pestaña nueva para que los
             revises con calma.

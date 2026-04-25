@@ -20,7 +20,7 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
     () => new Set(catalog.flatMap((cat) => cat.resources.map((r) => r.path))),
     [catalog]
   );
-  const embeddedPath = "modulos de formacion/Recursos Colombia/Fuentes-y-eventos-Colombia.html";
+  const embeddedPath = "modulo de formacion final/Recursos Colombia/Fuentes-y-eventos-Colombia.html";
   const totalResources = validPaths.size;
 
   // Seed seen with server progress, filtered to valid resources only.
@@ -137,7 +137,9 @@ export function TrainingCatalogList({ catalog, initialSeen }: Props) {
                           <Check className="h-3 w-3" />
                         </span>
                       )}
-                      <span>{res.label.replace(/\.[^/.]+$/, "")}</span>
+                      <span className={/^\s*unidad\b/i.test(res.label) ? "font-semibold" : undefined}>
+                        {res.label.replace(/\.[^/.]+$/, "")}
+                      </span>
                     </span>
                     <span className="text-xs text-muted-foreground">{isMobile ? "Descargar" : "Abrir"}</span>
                   </button>

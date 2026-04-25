@@ -21,7 +21,7 @@ function prettifyName(fileName: string) {
 type CategoryDefinition = {
   category: string;
   description?: string;
-  dir?: string; // directory inside "modulos de formacion"
+  dir?: string; // directory inside "modulo de formacion final"
   files: string[]; // file names inside the directory (or root if dir is empty)
 };
 
@@ -30,15 +30,15 @@ const catalogDefinition: CategoryDefinition[] = [
   {
     category: "COMERCIO ELECTRÓNICO",
     description: "Aprende a crear, gestionar y optimizar tiendas en línea para vender productos o servicios a través de internet. Este módulo aborda conceptos clave como plataformas e-commerce, métodos de pago digitales, logística de envíos y estrategias para aumentar las ventas en entornos digitales.",
-    dir: "comercio electrónico",
+    dir: "Comercio Electrónico",
     files: [
-      "Unidad 1 Introduccion al Comercio Electronico_20260331_104024_0000.pdf",
-      "Unidad 2 Creacion de la Presencia Online._20260331_104536_0000.pdf",
-      "Unidad 3 Estrategias de Ventas Digitales._20260331_104917_0000.pdf",
-      "Unidad 4 Medios de Pago y Logistica._20260331_105159_0000.pdf",
-      "Unidad 5 Marketing Digital para el E-commerce_20260331_105550_0000.pdf",
-      "Unidad 6 Gestion y Crecimiento del Negocio Online._20260331_110404_0000.pdf",
-      "Actividades Practicas Comercio Electronico._20260331_110205_0000.pdf",
+      "Unidad 1Introduccion al Comercio Electronico.pdf",
+      "Unidad 2 Creacion de la Presencia Online..pdf",
+      "Unidad 3 Estrategias de Ventas Digitales..pdf",
+      "Unidad 4 Medios de Pago y Logistica..pdf",
+      "Unidad 5 Marketing Digital para el E-commerce.pdf",
+      "Unidad 6 Gestion y Crecimiento del Negocio Online..pdf",
+      "Actividades Practicas Comercio Electronico..pdf",
     ],
   },
   {
@@ -46,14 +46,14 @@ const catalogDefinition: CategoryDefinition[] = [
     description: "Desarrolla habilidades para gestionar adecuadamente los recursos financieros de tu emprendimiento. Incluye temas como costos, presupuestos, flujo de caja, fijación de precios y toma de decisiones financieras que permitan la sostenibilidad del negocio.",
     dir: "Finanzas para Emprendedores",
     files: [
-      "Unidad-1-Introduccion-a-las-Finanzas-para-Emprendedores.pptx.pdf",
-      "Unidad-2-Control-de-Ingresos-y-Gastos.pptx.pdf",
-      "Unidad-3-Presupuesto-Empresarial.pptx.pdf",
-      "Unidad-4-Flujo-de-Caja.pptx.pdf",
-      "Unidad-5-Fuentes-de-Financiamiento-para-Emprendedores.pptx.pdf",
-      "Unidad-6-Indicadores-Financieros-Basicos.pptx.pdf",
-      "unidad-7-Buenas-Practicas-Financieras.pptx.pdf",
-      "Actividades-finales-de-los-modulo.pptx.pdf",
+      "Unidad 1 Introduccion a las Finanzas para Emprendedores..pdf",
+      "Unidad 2 Control de Ingresos y Gastos..pdf",
+      "Unidad 3 Presupuesto Empresarial..pdf",
+      "Unidad 4 Flujo de Caja..pdf",
+      "Unidad 5 Fuentes de Financiamiento para Emprendedores..pdf",
+      "Unidad 6 Indicadores Financieros Basicos..pdf",
+      "unidad 7 Buenas Practicas Financieras..pdf",
+      "Actividades finales de los modulo..pdf",
     ],
   },
   {
@@ -61,12 +61,12 @@ const catalogDefinition: CategoryDefinition[] = [
     description: "Conoce estrategias para promocionar tu negocio en medios digitales. Este módulo enseña el uso de redes sociales, publicidad online, branding, creación de contenido y herramientas digitales para atraer clientes y posicionar tu emprendimiento en el mercado.",
     dir: "Marketing Digital para Emprendimientos",
     files: [
-      "Introduccion-al-Marketing-Digital.pptx.pdf",
-      "UNIDAD-2-IDENTIDAD-Y-PRESENCIA-DIGITAL.pptx.pdf",
-      "UNIDAD-3-Estrategias-y-Herramientas-Digitales.pptx.pdf",
-      "UNIDAD-4-Creacion-de-Contenido-Digital.pptx.pdf",
-      "Unidad-5-Analitica-y-Medicion-de-Resultados-en-Marketing-Digital.pptx.pdf",
-      "Actividades-Propuestas.pptx.pdf",
+      "Unidad 1 Introduccion al Marketing Digital..pdf",
+      "UNIDAD 2 IDENTIDAD Y PRESENCIA DIGITAL..pdf",
+      "UNIDAD 3 Estrategias y Herramientas Digitales..pdf",
+      "UNIDAD 4 Creación de Contenido Digital..pdf",
+      "Unidad 5 Analítica y Medición de Resultados en Marketing Digital..pdf",
+      "Actividades Propuestas..pdf",
     ],
   },
   {
@@ -74,12 +74,12 @@ const catalogDefinition: CategoryDefinition[] = [
     description: "Aprende a estructurar y definir tu idea de emprendimiento mediante herramientas como el modelo Canvas. Este módulo te ayudará a identificar tu propuesta de valor, clientes, canales, fuentes de ingresos y recursos clave para convertir tu idea en un negocio viable.",
     dir: "Modelos de Negocio",
     files: [
-      "Introduccion-a-los-Modelos-de-Negocio.pptx.pdf",
-      "Unidad-2-Herramientas-para-disenar-modelos-de-negocio.pptx.pdf",
-      "Unidad-3-Innovacion-y-Tendencias-en-Modelos-de-Negocio.pptx.pdf",
-      "Unidad-4-Validacion-de-Modelos-de-Negocio.pptx.pdf",
-      "Unidad-5-Presentacion-y-Comunicacion-del-Modelo-de-Negocio.pptx.pdf",
-      "actividades propuesta Modelos-de-Negocio.pptx.pdf",
+      "Unidad 1 Introduccion a los Modelos de Negocio..pdf",
+      "Unidad 2 Herramientas para diseñar modelos de negocio..pdf",
+      "Unidad 3 Innovación y Tendencias en Modelos de Negocio..pdf",
+      "Unidad 4 Validacion de Modelos de Negocio..pdf",
+      "Unidad 5 Presentacion y Comunicacion del Modelo de Negocio..pdf",
+      "Actividades propuesta Modelos de Negocio..pdf",
     ],
   },
   {
@@ -91,7 +91,7 @@ const catalogDefinition: CategoryDefinition[] = [
 
 function buildCatalog(): TrainingCategory[] {
   return catalogDefinition.map(({ category, description, dir, files }) => {
-    const prefix = dir ? `modulos de formacion/${dir}/` : "modulos de formacion/";
+    const prefix = dir ? `modulo de formacion final/${dir}/` : "modulo de formacion final/";
     const resources: TrainingResource[] = files.map((file) => ({
       label: prettifyName(file),
       path: `${prefix}${file}`,

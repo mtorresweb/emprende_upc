@@ -22,7 +22,7 @@ export default async function NuevoEmprendimientoPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Nuevo emprendimiento</p>
-          <h1 className="text-2xl font-semibold text-foreground">Publicar nuevo emprendimiento</h1>
+          <h1 className="text-2xl font-semibold text-foreground uppercase">PUBLICAR NUEVO EMPRENDIMIENTO</h1>
         </div>
         <Link
           href="/panel"
@@ -71,13 +71,13 @@ export default async function NuevoEmprendimientoPage() {
                   >
                     <option value="IDEA">Idea</option>
                     <option value="PROTOTYPE">Prototipo</option>
-                    <option value="MVP">MVP</option>
+                    <option value="MVP">MVP (Producto Minimo Viable)</option>
                     <option value="GROWTH">Crecimiento</option>
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="tags">Etiquetas (coma separadas)</Label>
-                  <Input id="tags" name="tags" placeholder="fintech, impacto, salud" />
+                  <Label htmlFor="tags">Etiquetas (usa hashtags)</Label>
+                  <Input id="tags" name="tags" placeholder="#fintech #impacto #salud" />
                 </div>
               </div>
             </CardContent>

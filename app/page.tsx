@@ -92,7 +92,7 @@ export default async function Home() {
       <section className="relative w-full overflow-hidden pt-6 md:pt-10 lg:pt-12">
         <div className="relative h-65 w-full overflow-hidden rounded-3xl shadow-lg md:h-105 lg:h-130">
           <Image
-            src="/portrait.jpg"
+            src="/portrait.png"
             alt="Emprende UPC portada"
             fill
             className="rounded-3xl object-contain"

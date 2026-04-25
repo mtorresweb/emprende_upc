@@ -51,7 +51,7 @@ export function QuizEtapaDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle asChild>
-            <h2 className="text-lg font-semibold mb-2">¿En qué etapa está tu proyecto?</h2>
+            <h2 className="text-lg font-semibold mb-2 uppercase">¿EN QUÉ ETAPA ESTÁ TU PROYECTO?</h2>
           </DialogTitle>
         </DialogHeader>
         {etapa ? (

@@ -35,7 +35,7 @@ Lanzar una app institucional para publicar y visibilizar emprendimientos de estu
    - Sección pública de emprendimientos destacados.
 
 5) **Módulos de formación (RF6)**
-   - Leer estructura en `public/modulos de formacion/**` y mostrar lista por categoría.
+   - Leer estructura en `public/modulo de formacion final/**` y mostrar lista por categoría.
    - Enlaces que abren PDFs en nueva pestaña (`target="_blank" rel="noopener noreferrer"`).
 
 6) **Chatbot (RF7)**

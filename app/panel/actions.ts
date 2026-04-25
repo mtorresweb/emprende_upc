@@ -32,6 +32,22 @@ const coverSchema = z.object({
 const MAX_FILE_SIZE = 8 * 1024 * 1024; // 8MB por archivo
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
+function parseTags(input?: string) {
+  if (!input) return [];
+  const raw = input.trim();
+  if (!raw) return [];
+
+  // Preferred format: hashtags, e.g. "#fintech #salud #impacto".
+  const hashMatches = Array.from(raw.matchAll(/#([^\s#,;]+)/g)).map((m) => m[1]?.trim()).filter(Boolean) as string[];
+  if (hashMatches.length > 0) return hashMatches;
+
+  // Backward compatibility for old comma-separated inputs.
+  return raw
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
 function getRedirectTo(formData: FormData, fallback: string): string {
   const redirectTo = formData.get("redirectTo")?.toString();
   return redirectTo && redirectTo.startsWith("/") ? redirectTo : fallback;
@@ -48,13 +64,7 @@ export async function createVenture(userId: string, formData: FormData) {
   const parsed = ventureSchema.safeParse(raw);
   if (!parsed.success) redirect("/panel?error=Revisa%20los%20datos%20del%20formulario.");
 
-  const tags = parsed.data.tags
-    ? parsed.data.tags
-        .toString()
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean)
-    : [];
+  const tags = parseTags(parsed.data.tags?.toString());
 
   // Procesar portada si se envía
   let coverKey: string | undefined = undefined;
@@ -149,13 +159,7 @@ export async function updateVenture(userId: string, formData: FormData) {
 
   if (!parsed.success) redirect("/panel?error=Datos%20inv%C3%A1lidos.");
 
-  const tags = parsed.data.tags
-    ? parsed.data.tags
-        .toString()
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean)
-    : [];
+  const tags = parseTags(parsed.data.tags?.toString());
 
   await prisma.venture.update({
     where: { id: parsed.data.id, ownerId: userId },

@@ -65,8 +65,8 @@ export default async function PanelPage({
 
       <Card className="border-border/70 bg-linear-to-br from-card to-muted/60 shadow-sm">
         <CardHeader className="space-y-3 pb-0">
-          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Panel</p>
-          <CardTitle className="text-2xl">Emprendimientos y adjuntos</CardTitle>
+          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">PANEL</p>
+          <CardTitle className="text-2xl uppercase">EMPRENDIMIENTOS Y ADJUNTOS</CardTitle>
           <CardDescription className="text-sm leading-6">
             Gestiona la ficha de cada proyecto, renombra o elimina adjuntos y publica nuevos emprendimientos con un solo flujo.
           </CardDescription>
@@ -89,7 +89,7 @@ export default async function PanelPage({
         <div className="grid items-start gap-8 lg:grid-cols-1">
           <Card className="w-full min-w-0 border-border/70 bg-card/90 shadow-sm">
             <CardHeader className="space-y-2 pb-2">
-              <CardTitle className="text-xl">Mis emprendimientos</CardTitle>
+              <CardTitle className="text-xl uppercase">MIS EMPRENDIMIENTOS</CardTitle>
               <CardDescription>Publica y edita tus proyectos.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

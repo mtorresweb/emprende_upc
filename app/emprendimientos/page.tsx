@@ -92,7 +92,7 @@ export default async function EmprendimientosPage({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Explorar</p>
-          <h1 className="text-3xl font-semibold text-foreground">Emprendimientos</h1>
+          <h1 className="text-3xl font-semibold text-foreground uppercase">EMPRENDIMIENTOS</h1>
           <p className="text-sm text-muted-foreground">Emprendimientos publicados por toda la comunidad. Filtra por etapa, busca por texto y cambia la vista.</p>
         </div>
         {session?.user?.id ? (
@@ -114,7 +114,7 @@ export default async function EmprendimientosPage({
           <Label htmlFor="q" className="text-sm">Buscar</Label>
           <Input id="q" name="q" placeholder="Título, descripción o tag" defaultValue={q} className="h-11" />
         </div>
-        <div className="flex min-w-[180px] flex-col gap-2 md:w-auto">
+        <div className="flex min-w-45 flex-col gap-2 md:w-auto">
           <Label htmlFor="stage" className="text-sm">Etapa</Label>
           <Select name="stage" defaultValue={stageValue}>
             <SelectTrigger id="stage" className="h-11">
@@ -124,12 +124,12 @@ export default async function EmprendimientosPage({
               <SelectItem value="ALL">Todas</SelectItem>
               <SelectItem value="IDEA">Idea</SelectItem>
               <SelectItem value="PROTOTYPE">Prototipo</SelectItem>
-              <SelectItem value="MVP">MVP</SelectItem>
+              <SelectItem value="MVP">MVP (Producto Minimo Viable)</SelectItem>
               <SelectItem value="GROWTH">Crecimiento</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <div className="flex min-w-[140px] flex-col justify-end gap-2 md:w-auto md:items-end">
+        <div className="flex min-w-35 flex-col justify-end gap-2 md:w-auto md:items-end">
           <input type="hidden" name="view" value={view} />
           <Button type="submit" className="h-11 w-full md:w-auto">Aplicar</Button>
         </div>

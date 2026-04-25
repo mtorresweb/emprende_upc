@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import { Bot, MessageCircle, X } from "lucide-react";
+import { Bot, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -45,16 +45,11 @@ export function FloatingChat() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-[60] flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 right-4 z-60 flex flex-col items-end gap-3">
       {open && (
         <div className="w-80 rounded-2xl border border-border/70 bg-card/95 p-3 shadow-xl backdrop-blur overflow-hidden">
           <div className="mb-2 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Bot className="h-4 w-4" />
-              </span>
-              <p className="text-sm font-semibold">Asistente</p>
-            </div>
+            <p className="text-sm font-semibold">Asistente</p>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setOpen(false)}>
               <X className="h-4 w-4" />
             </Button>
@@ -71,7 +66,7 @@ export function FloatingChat() {
                 <span className="block text-xs font-semibold text-muted-foreground">
                   {m.role === "user" ? "Tú" : "Asistente"}
                 </span>
-                <span className="block whitespace-pre-wrap break-words leading-relaxed">{m.content}</span>
+                <span className="block whitespace-pre-wrap wrap-break-word leading-relaxed">{m.content}</span>
               </div>
             ))}
             {error && <p className="text-xs text-destructive">No se pudo responder. Intenta de nuevo.</p>}
@@ -91,13 +86,15 @@ export function FloatingChat() {
         </div>
       )}
 
-      <div
-        className="h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 grid justify-center items-center hover:cursor-pointer"
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Abrir chat"
-      >
-        <Bot className="h-5 w-5" />
-      </div>
+      {!open && (
+        <div
+          className="h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 grid justify-center items-center hover:cursor-pointer"
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Abrir chat"
+        >
+          <Bot className="h-5 w-5" />
+        </div>
+      )}
     </div>
   );
 }

@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 
   const sanitized = sanitizeResource(resource);
-  if (!sanitized.startsWith("modulos de formacion/")) {
+  if (!sanitized.startsWith("modulo de formacion final/")) {
     return NextResponse.json({ error: "Recurso inválido" }, { status: 400 });
   }
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
   }
 
   const sanitized = sanitizeResource(resource);
-  if (!sanitized.startsWith("modulos de formacion/")) {
+  if (!sanitized.startsWith("modulo de formacion final/")) {
     return NextResponse.json({ error: "Recurso inválido" }, { status: 400 });
   }
 
