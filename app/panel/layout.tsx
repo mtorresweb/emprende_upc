@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Card } from "@/components/ui/card";
+
 export default function PanelLayout({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8">
@@ -11,7 +13,7 @@ export default function PanelLayout({ children }: { children: ReactNode }) {
           </p>
         </div>
       </div>
-      <div className="rounded-2xl border border-border/70 bg-transparent p-0">{children}</div>
+      <Card className="border-border/80 bg-card/80 p-6 shadow-sm">{children}</Card>
     </div>
   );
 }
