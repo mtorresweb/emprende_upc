@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { AttachmentsGuard } from "@/components/panel/attachments-guard";
 import { CoverPicker } from "@/components/panel/cover-picker";
 import { createVenture } from "../actions";
 import { authOptions } from "@/lib/auth";
@@ -19,6 +20,7 @@ export default async function NuevoEmprendimientoPage() {
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-8 pb-12 pt-8">
+      <AttachmentsGuard />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Nuevo emprendimiento</p>
@@ -38,7 +40,7 @@ export default async function NuevoEmprendimientoPage() {
         <div className="shrink-0"><QuizEtapaDialog /></div>
       </div>
 
-      <form action={createVentureAction} className="space-y-8">
+      <form action={createVentureAction} className="space-y-8" data-attachment-form="true">
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="border-border/70 bg-card/90 shadow-sm">
             <CardHeader className="space-y-2 pb-2">

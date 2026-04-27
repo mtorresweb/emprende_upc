@@ -309,7 +309,7 @@ export default async function VentureDetailPage({
             )}
           </div>
 
-          <form action={updateCoverAction} className="space-y-3">
+          <form action={updateCoverAction} className="space-y-3" data-attachment-form="true">
             <CoverPicker defaultUrl={venture.coverKey ?? undefined} />
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:gap-2">
               <input type="hidden" name="ventureId" value={venture.id} />
@@ -348,7 +348,7 @@ export default async function VentureDetailPage({
             )}
           </div>
 
-          <form action={updateLogoAction} className="space-y-3">
+          <form action={updateLogoAction} className="space-y-3" data-attachment-form="true">
             <div className="space-y-2">
               <Label htmlFor="logo">Imagen de logo</Label>
               <Input
